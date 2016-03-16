@@ -1,17 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
     tools:context="com.camnter.easycountdownsurfaceview.demo.MainActivity">
 
-    <com.camnter.easycountdownsurfaceview.EasyCountDownSurfaceView
-        android:layout_width="500dp"
-        android:layout_height="100dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <com.camnter.easycountdowntextureview.EasyCountDownTextureView
+            android:id="@+id/sv"
+            android:layout_width="380dp"
+            android:layout_height="100dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="166dp"
+            android:text="sss" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="166dp"
+            android:text="sss" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="166dp"
+            android:text="sss" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="166dp"
+            android:text="sss" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="166dp"
+            android:text="sss" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="166dp"
+            android:text="sss" />
+
+
+    </LinearLayout>
+
+
+</ScrollView>

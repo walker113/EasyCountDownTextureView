@@ -1,4 +1,4 @@
-package com.camnter.easycountdownsurfaceview.demo;
+package com.camnter.easycountdowntextureview.demo;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
