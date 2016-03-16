@@ -7,13 +7,17 @@ import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.RectF;
 import android.os.Build;
+import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Description：EasyCountDownSurfaceView
@@ -22,25 +26,49 @@ import java.util.Date;
  */
 public class EasyCountDownSurfaceView extends SurfaceView implements SurfaceHolder.Callback2 {
 
+    private static final String LESS_THAN_TEN_FORMAT = "%02d";
+    private static final String MEASURE_TEXT_WIDTH_HEIGHT_SAMPLE = "06";
+
     private static final int DEFAULT_COLOR_BACKGROUND = 0xff000000;
     private static final int DEFAULT_COLOR_TIME = 0xffffffff;
     private DisplayMetrics mMetrics;
 
-    private static final int COUNT_DOWN_INTERVAL = 1000;
+    private static final int COUNT_DOWN_INTERVAL = 100;
 
-    private long mMillisInFuture = 99000L;
+    private long mMillisInFuture = 1000 * 60 * 6L + 1000 * 60 * 60 * 6L + 1000 * 30L;
 
+    /**************
+     * Default dp *
+     **************/
     private static final float DEFAULT_BACKGROUND_PAINT_WIDTH = 0.66f;
-    private static final float DEFAULT_TIME_PAINT_WIDTH = 0.66f;
+    private static final float DEFAULT_TIME_PAINT_WIDTH = 0.88f;
+    private static final float DEFAULT_ROUND_RECT_RADIUS = 5.0f;
+    private static final float DEFAULT_RECT_SIDE = 26.0f;
+    private static final float DEFAULT_RECT_SPACING = 10.0f;
 
-    private double increaseTime = 0.0d;
-    private long lastTimeRefresh = 0L;
+
+    /**************
+     * Default px *
+     **************/
+    private float rectSide;
+    private float rectSpacing;
+    private float firstTranslateX;
+    private float secondTranslateX;
+    private float roundRectRadius;
 
     private SurfaceHolder mHolder;
     private EasyThread mThread;
 
+    private final Locale locale = Locale.getDefault();
+    private final Calendar mCalendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+00:00"));
+
     private Paint timePaint;
     private Paint backgroundPaint;
+
+    private RectF backgroundRectF;
+
+    private Paint.FontMetricsInt timePaintfontMetrics;
+    private float timePaintBaseLine;
 
     public EasyCountDownSurfaceView(Context context) {
         super(context);
@@ -65,58 +93,82 @@ public class EasyCountDownSurfaceView extends SurfaceView implements SurfaceHold
 
     private void init() {
         this.mMetrics = this.getResources().getDisplayMetrics();
+        this.setTime(this.mMillisInFuture);
+
         this.mHolder = this.getHolder();
         this.mHolder.addCallback(this);
 
+        // set SurfaceView transparent
         this.setZOrderOnTop(true);
         this.mHolder.setFormat(PixelFormat.TRANSPARENT);
 
-        this.initPaints();
-        this.mThread = new EasyThread();
+        this.initBackgroundPaint();
+        this.initBackgroundAttribute();
+        this.initTimePaint();
 
+        this.roundRectRadius = this.dp2px(DEFAULT_ROUND_RECT_RADIUS);
     }
 
-    private void initPaints() {
+    private void initBackgroundPaint() {
         this.backgroundPaint = new Paint();
         this.backgroundPaint.setAntiAlias(true);
         this.backgroundPaint.setColor(DEFAULT_COLOR_BACKGROUND);
-        this.backgroundPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        this.backgroundPaint.setStyle(Paint.Style.FILL);
         this.backgroundPaint.setStrokeWidth(this.dp2px(DEFAULT_BACKGROUND_PAINT_WIDTH));
+    }
 
+    private void initTimePaint() {
         this.timePaint = new Paint();
         this.timePaint.setAntiAlias(true);
         this.timePaint.setColor(DEFAULT_COLOR_TIME);
         this.timePaint.setStyle(Paint.Style.FILL_AND_STROKE);
         this.timePaint.setStrokeWidth(this.dp2px(DEFAULT_TIME_PAINT_WIDTH));
-        this.timePaint.setTextSize(30);
+        this.timePaint.setTextSize(40);
+        this.timePaint.setTextAlign(Paint.Align.CENTER);
+        this.timePaintfontMetrics = this.timePaint.getFontMetricsInt();
+        this.timePaintBaseLine = (this.backgroundRectF.bottom + this.backgroundRectF.top - this.timePaintfontMetrics.bottom - this.timePaintfontMetrics.top) / 2;
+    }
+
+    private void initBackgroundAttribute() {
+        this.rectSide = this.dp2px(DEFAULT_RECT_SIDE);
+        this.rectSpacing = this.dp2px(DEFAULT_RECT_SPACING);
+        this.firstTranslateX = this.rectSide + this.rectSpacing;
+        this.secondTranslateX = this.rectSide * 2 + this.rectSpacing * 2;
+        this.backgroundRectF = new RectF(0, 0, this.rectSide, this.rectSide);
     }
 
 
     @Override
     public void surfaceRedrawNeeded(SurfaceHolder holder) {
-
+        System.out.println("surfaceRedrawNeeded");
     }
 
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        if (null == mThread) {
-            mThread = new EasyThread();
-            mThread.start();
+        System.out.println("surfaceCreated");
+        if (this.mThread == null) {
+            this.mThread = new EasyThread();
+            this.mThread.start();
+        } else {
+            if (mMillisInFuture > 0) {
+                this.mThread.isRunning = true;
+            }
         }
     }
 
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
+        System.out.println("surfaceChanged");
     }
 
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        if (null != mThread) {
-            mThread.stopThread();
+        System.out.println("surfaceDestroyed");
+        if (this.mThread != null) {
+            this.mThread.stopThread();
         }
     }
 
@@ -130,8 +182,7 @@ public class EasyCountDownSurfaceView extends SurfaceView implements SurfaceHold
      *
      * @param date date
      */
-    public void start(Date date) {
-        this.mThread.start();
+    public void setTime(Date date) {
     }
 
     /**
@@ -139,91 +190,103 @@ public class EasyCountDownSurfaceView extends SurfaceView implements SurfaceHold
      *
      * @param timeMillis timeMillis
      */
-    public void start(long timeMillis) {
-
-    }
-
-    /**
-     * Stop count down
-     */
-    public void stop() {
-
-    }
-
-    public void start() {
-        if (this.mThread.isAlive()) {
-            this.mThread.start();
-        } else {
-            this.mThread.run();
-        }
+    public void setTime(long timeMillis) {
+        this.mMillisInFuture = timeMillis;
+        this.mCalendar.setTimeInMillis(this.mMillisInFuture);
     }
 
     private class EasyThread extends Thread {
 
-        public boolean isRunning = false;
+        public volatile boolean isRunning = false;
+        public volatile boolean isCompleted = false;
 
         public EasyThread() {
             this.isRunning = true;
         }
 
         public synchronized final void stopThread() {
-            isRunning = false;
-            boolean workIsNotFinish = true;
-            while (workIsNotFinish) {
-                try {
-                    this.join();
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                workIsNotFinish = false;
-            }
+            System.out.println("stopThread");
+            this.isRunning = false;
         }
 
         @Override
         public void run() {
             System.out.println("Run");
-            long deltaTime = 0;
+            long deltaTime;
             long tickTime = 0;
-            while (isRunning) {
-                Canvas canvas = null;
-                try {
-                    synchronized (this) {
-                        canvas = mHolder.lockCanvas();
-                        this.drawBackground(canvas);
-                        this.drawTime(canvas, (int) ((mMillisInFuture -= COUNT_DOWN_INTERVAL) / 1000));
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    if (mHolder != null) {
-                        mHolder.unlockCanvasAndPost(canvas);
-                    }
-                }
-                deltaTime = System.currentTimeMillis() - tickTime;
-                if (deltaTime < COUNT_DOWN_INTERVAL) {
+            while (!isCompleted) {
+                while (isRunning) {
+                    Canvas canvas = null;
                     try {
-                        Thread.sleep(COUNT_DOWN_INTERVAL - deltaTime);
-                    } catch (InterruptedException e) {
+                        synchronized (this) {
+                            canvas = mHolder.lockCanvas();
+                            this.drawTimeAndBackground(
+                                    canvas,
+                                    String.format(locale, LESS_THAN_TEN_FORMAT, mCalendar.get(Calendar.HOUR_OF_DAY)),
+                                    String.format(locale, LESS_THAN_TEN_FORMAT, mCalendar.get(Calendar.MINUTE)),
+                                    String.format(locale, LESS_THAN_TEN_FORMAT, mCalendar.get(Calendar.SECOND))
+                            );
+
+                            // refresh time
+                            mMillisInFuture -= 1000;
+                            mCalendar.setTimeInMillis(mMillisInFuture);
+
+                            if (mMillisInFuture < 0) {
+                                this.isCompleted = true;
+                                this.isRunning = false;
+                            }
+                        }
+                    } catch (Exception e) {
                         e.printStackTrace();
+                    } finally {
+                        try {
+                            if (mHolder != null)
+                                mHolder.unlockCanvasAndPost(canvas);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
+                    deltaTime = SystemClock.uptimeMillis() - tickTime;
+                    if (deltaTime < COUNT_DOWN_INTERVAL) {
+                        try {
+                            Thread.sleep(COUNT_DOWN_INTERVAL - deltaTime);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    tickTime = SystemClock.uptimeMillis();
                 }
-                tickTime = System.currentTimeMillis();
             }
-
+            System.out.println("Run end");
         }
 
-        private void drawBackground(Canvas canvas) {
-            canvas.drawRoundRect(new RectF(0, 0, 100, 100), dp2px(4), dp2px(4), backgroundPaint);
-            canvas.drawRoundRect(new RectF(150, 0, 250, 100), dp2px(4), dp2px(4), backgroundPaint);
-            canvas.drawRoundRect(new RectF(300, 0, 400, 100), dp2px(4), dp2px(4), backgroundPaint);
-        }
+        private void drawTimeAndBackground(Canvas canvas, String hour, String minute, String second) {
+            System.out.println("hour:" + hour + " minute:" + minute + " second:" + second);
+            canvas.drawRoundRect(backgroundRectF, roundRectRadius, roundRectRadius, backgroundPaint);
+            canvas.drawText(hour, backgroundRectF.centerX(), timePaintBaseLine, timePaint);
 
-        private void drawTime(Canvas canvas, int time) {
-            canvas.drawText(time + "", 330, 70, timePaint);
+
+            canvas.save();
+            canvas.translate(firstTranslateX, 0);
+            canvas.drawRoundRect(backgroundRectF, roundRectRadius, roundRectRadius, backgroundPaint);
+            canvas.drawText(minute, backgroundRectF.centerX(), timePaintBaseLine, timePaint);
+            canvas.restore();
+
+            canvas.save();
+            canvas.translate(secondTranslateX, 0);
+            canvas.drawRoundRect(backgroundRectF, roundRectRadius, roundRectRadius, backgroundPaint);
+            canvas.drawText(second, backgroundRectF.centerX(), timePaintBaseLine, timePaint);
+            canvas.restore();
+
         }
     }
 
+    /**
+     * Dp to px
+     *
+     * @param dp dp
+     * @return px
+     */
     private float dp2px(float dp) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, this.mMetrics);
     }

@@ -8,4 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="SurfaceViewStyle">
+        <item name="android:layout_margin">16dp</item>
+    </style>
+
 </resources>
