@@ -46,6 +46,7 @@ public class EasyCountDownTextureView extends TextureView implements TextureView
     private static final float DEFAULT_RECT_WIDTH = 18.0f;
     private static final float DEFAULT_RECT_HEIGHT = 17.0f;
     private static final float DEFAULT_RECT_SPACING = 6.0f;
+    private static final float DEFAULT_TEXT_SIZE = 13.0f;
 
     /**************
      * Default px *
@@ -64,10 +65,11 @@ public class EasyCountDownTextureView extends TextureView implements TextureView
 
     private Paint timePaint;
     private float timePaintBaseLine;
-    private Paint.FontMetricsInt timePaintFontMetrics;
 
     private Paint backgroundPaint;
     private RectF backgroundRectF;
+
+    private long lastRecordTime = 0;
 
     public EasyCountDownTextureView(Context context) {
         super(context);
@@ -108,8 +110,10 @@ public class EasyCountDownTextureView extends TextureView implements TextureView
         this.backgroundPaint = new Paint();
         this.backgroundPaint.setAntiAlias(true);
         this.backgroundPaint.setColor(DEFAULT_COLOR_BACKGROUND);
-        this.backgroundPaint.setStyle(Paint.Style.FILL);
+        this.backgroundPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        this.backgroundPaint.setTextSize(this.sp2px(DEFAULT_TEXT_SIZE));
         this.backgroundPaint.setStrokeWidth(this.dp2px(DEFAULT_BACKGROUND_PAINT_WIDTH));
+        this.backgroundPaint.setTextAlign(Paint.Align.CENTER);
         this.backgroundPaint.setStrokeCap(Paint.Cap.ROUND);
     }
 
@@ -119,11 +123,11 @@ public class EasyCountDownTextureView extends TextureView implements TextureView
         this.timePaint.setColor(DEFAULT_COLOR_TIME);
         this.timePaint.setStyle(Paint.Style.FILL_AND_STROKE);
         this.timePaint.setStrokeWidth(this.dp2px(DEFAULT_TIME_PAINT_WIDTH));
-        this.timePaint.setTextSize(this.sp2px(13));
+        this.timePaint.setTextSize(this.sp2px(DEFAULT_TEXT_SIZE));
         this.timePaint.setTextAlign(Paint.Align.CENTER);
         this.timePaint.setStrokeCap(Paint.Cap.ROUND);
-        this.timePaintFontMetrics = this.timePaint.getFontMetricsInt();
-        this.timePaintBaseLine = (this.backgroundRectF.bottom + this.backgroundRectF.top - this.timePaintFontMetrics.bottom - this.timePaintFontMetrics.top) / 2;
+        Paint.FontMetricsInt timePaintFontMetrics = this.timePaint.getFontMetricsInt();
+        this.timePaintBaseLine = (this.backgroundRectF.bottom + this.backgroundRectF.top - timePaintFontMetrics.bottom - timePaintFontMetrics.top) / 2;
     }
 
     private void initBackgroundAttribute() {
@@ -203,8 +207,6 @@ public class EasyCountDownTextureView extends TextureView implements TextureView
         @Override
         public void run() {
             System.out.println("Run");
-            long deltaTime;
-            long tickTime = 0;
             while (!completed) {
                 while (running) {
                     Canvas canvas = null;
@@ -236,29 +238,39 @@ public class EasyCountDownTextureView extends TextureView implements TextureView
                             e.printStackTrace();
                         }
                     }
-                    deltaTime = SystemClock.uptimeMillis() - tickTime;
-                    if (deltaTime < COUNT_DOWN_INTERVAL) {
+                    long pastTime = SystemClock.uptimeMillis() - lastRecordTime;
+                    if (pastTime < COUNT_DOWN_INTERVAL) {
                         try {
-                            Thread.sleep(COUNT_DOWN_INTERVAL - deltaTime);
+                            Thread.sleep(COUNT_DOWN_INTERVAL - pastTime);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
-                    tickTime = SystemClock.uptimeMillis();
+                    lastRecordTime = SystemClock.uptimeMillis();
                 }
             }
-            System.out.println("Run end");
         }
 
         private void drawTimeAndBackground(Canvas canvas, String hour, String minute, String second) {
-
+            canvas.save();
             canvas.drawRoundRect(backgroundRectF, roundRectRadius, roundRectRadius, backgroundPaint);
             canvas.drawText(hour, backgroundRectF.centerX(), timePaintBaseLine, timePaint);
+            canvas.restore();
+
+            canvas.save();
+            canvas.translate(firstTranslateX - rectSpacing / 2, 0);
+            canvas.drawText(":", 0, timePaintBaseLine, backgroundPaint);
+            canvas.restore();
 
             canvas.save();
             canvas.translate(firstTranslateX, 0);
             canvas.drawRoundRect(backgroundRectF, roundRectRadius, roundRectRadius, backgroundPaint);
             canvas.drawText(minute, backgroundRectF.centerX(), timePaintBaseLine, timePaint);
+            canvas.restore();
+
+            canvas.save();
+            canvas.translate(secondTranslateX - rectSpacing / 2, 0);
+            canvas.drawText(":", 0, timePaintBaseLine, backgroundPaint);
             canvas.restore();
 
             canvas.save();
@@ -279,6 +291,12 @@ public class EasyCountDownTextureView extends TextureView implements TextureView
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, this.mMetrics);
     }
 
+    /**
+     * Sp to px
+     *
+     * @param sp sp
+     * @return sp
+     */
     private float sp2px(float sp) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, this.mMetrics);
     }
