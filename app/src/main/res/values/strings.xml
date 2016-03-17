@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">EasyCountDownSurfaceView</string>
+    <string name="app_name">EasyCountDownTextureView</string>
+    <string name="style_bt">Style</string>
 </resources>

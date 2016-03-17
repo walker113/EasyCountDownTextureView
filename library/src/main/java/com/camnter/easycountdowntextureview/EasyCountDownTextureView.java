@@ -36,12 +36,16 @@ public class EasyCountDownTextureView extends TextureView implements TextureView
 
     private static final int COUNT_DOWN_INTERVAL = 1000;
 
-    private long mMillisInFuture = 1000 * 60 * 6L + 1000 * 60 * 60 * 6L + 1000 * 30L;
+    private static final long ONE_HOUR = 1000 * 60 * 60L;
+    private static final long ONE_MINUTE = 1000 * 60L;
+    private static final long ONE_SECOND = 1000L;
+
+    private long mMillisInFuture = 0L;
 
     /**************
      * Default dp *
      **************/
-    private static final float DEFAULT_BACKGROUND_PAINT_WIDTH = 0.66f;
+    private static final float DEFAULT_BACKGROUND_PAINT_WIDTH = 0.01f;
     private static final float DEFAULT_COLON_PAINT_WIDTH = 0.66f;
     private static final float DEFAULT_TIME_PAINT_WIDTH = 0.77f;
     private static final float DEFAULT_ROUND_RECT_RADIUS = 2.66f;
@@ -53,7 +57,7 @@ public class EasyCountDownTextureView extends TextureView implements TextureView
 
     // 66dp
     private static final float DEFAULT_VIEW_WIDTH = DEFAULT_RECT_WIDTH * 3 + DEFAULT_RECT_SPACING * 2;
-    // 18dp
+    // 17dp
     private static final float DEFAULT_VIEW_HEIGHT = DEFAULT_RECT_HEIGHT;
 
     /**************
@@ -74,6 +78,9 @@ public class EasyCountDownTextureView extends TextureView implements TextureView
     private float secondTranslateX;
     private float secondTranslateColonX;
 
+    private int timeHour;
+    private int timeMinute;
+    private int timeSecond;
 
     private int viewWidth;
     private int viewHeight;
@@ -120,12 +127,15 @@ public class EasyCountDownTextureView extends TextureView implements TextureView
         this.mMetrics = this.getResources().getDisplayMetrics();
         this.defaultWrapContentWidth = this.dp2px(DEFAULT_VIEW_WIDTH);
         this.defaultWrapContentHeight = this.dp2px(DEFAULT_VIEW_HEIGHT);
-        this.setTime(this.mMillisInFuture);
 
         this.setSurfaceTextureListener(this);
         this.setOpaque(false);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.EasyCountDownTextureView);
+        this.timeHour = a.getInteger(R.styleable.EasyCountDownTextureView_easyCountHour, 0);
+        this.timeMinute = a.getInteger(R.styleable.EasyCountDownTextureView_easyCountMinute, 0);
+        this.timeSecond = a.getInteger(R.styleable.EasyCountDownTextureView_easyCountSecond, 0);
+
         this.backgroundPaint = new Paint();
         this.backgroundPaint.setAntiAlias(true);
         this.backgroundPaint.setColor(a.getColor(R.styleable.EasyCountDownTextureView_easyCountBackgroundColor, DEFAULT_COLOR_BACKGROUND));
@@ -161,6 +171,13 @@ public class EasyCountDownTextureView extends TextureView implements TextureView
 
         this.rectRadius = a.getDimension(R.styleable.EasyCountDownTextureView_easyCountRectRadius, this.dp2px(DEFAULT_ROUND_RECT_RADIUS));
         a.recycle();
+
+        this.updateTime();
+    }
+
+    private void updateTime(){
+        this.mMillisInFuture = this.timeHour * ONE_HOUR + this.timeMinute * ONE_MINUTE + this.timeSecond * ONE_SECOND;
+        this.setTime(this.mMillisInFuture);
     }
 
     private void refitBackgroundAttribute() {
@@ -222,6 +239,21 @@ public class EasyCountDownTextureView extends TextureView implements TextureView
         this.viewHeight = h;
         this.refitBackgroundAttribute();
         this.invalidate();
+    }
+
+    public void setTimeHour(int timeHour) {
+        this.timeHour = timeHour;
+        this.updateTime();
+    }
+
+    public void setTimeMinute(int timeMinute) {
+        this.timeMinute = timeMinute;
+        this.updateTime();
+    }
+
+    public void setTimeSecond(int timeSecond) {
+        this.timeSecond = timeSecond;
+        this.updateTime();
     }
 
     public void setRectWidth(float rectWidthDp) {
@@ -313,13 +345,11 @@ public class EasyCountDownTextureView extends TextureView implements TextureView
         }
 
         public synchronized final void stopThread() {
-            System.out.println("stopThread");
             this.running = false;
         }
 
         @Override
         public void run() {
-            System.out.println("Run");
             while (!completed) {
                 while (running) {
                     Canvas canvas = null;
@@ -327,11 +357,14 @@ public class EasyCountDownTextureView extends TextureView implements TextureView
                         synchronized (EasyCountDownTextureView.this) {
                             canvas = EasyCountDownTextureView.this.lockCanvas();
                             if (canvas == null) continue;
+                            timeHour = mCalendar.get(Calendar.HOUR_OF_DAY);
+                            timeMinute = mCalendar.get(Calendar.MINUTE);
+                            timeSecond = mCalendar.get(Calendar.SECOND);
                             this.drawTimeAndBackground(
                                     canvas,
-                                    String.format(locale, LESS_THAN_TEN_FORMAT, mCalendar.get(Calendar.HOUR_OF_DAY)),
-                                    String.format(locale, LESS_THAN_TEN_FORMAT, mCalendar.get(Calendar.MINUTE)),
-                                    String.format(locale, LESS_THAN_TEN_FORMAT, mCalendar.get(Calendar.SECOND))
+                                    String.format(locale, LESS_THAN_TEN_FORMAT, timeHour),
+                                    String.format(locale, LESS_THAN_TEN_FORMAT, timeMinute),
+                                    String.format(locale, LESS_THAN_TEN_FORMAT, timeSecond)
                             );
                             // refresh time
                             mMillisInFuture -= 1000;

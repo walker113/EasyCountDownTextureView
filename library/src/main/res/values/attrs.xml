@@ -10,5 +10,8 @@
         <attr name="easyCountBackgroundColor" format="color" />
         <attr name="easyCountColonSize" format="dimension" />
         <attr name="easyCountTimeSize" format="dimension" />
+        <attr name="easyCountHour" format="integer" />
+        <attr name="easyCountMinute" format="integer" />
+        <attr name="easyCountSecond" format="integer" />
     </declare-styleable>
 </resources>
