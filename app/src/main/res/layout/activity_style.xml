@@ -12,6 +12,7 @@
     tools:context="com.camnter.easycountdowntextureview.demo.MainActivity">
 
     <com.camnter.easycountdowntextureview.EasyCountDownTextureView
+        android:id="@+id/style_tv"
         android:layout_width="132dp"
         android:layout_height="36dp"
         app:easyCountBackgroundColor="#ffdddddd"
@@ -27,5 +28,32 @@
         app:easyCountTimeColor="#ff3A94FF"
         app:easyCountTimeSize="20sp" />
 
+    <Button
+        android:id="@+id/style_hour_bt"
+        style="@style/StyleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/style_hour_bt" />
+
+    <Button
+        android:id="@+id/style_minute_bt"
+        style="@style/StyleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@id/style_hour_bt"
+        android:layout_toRightOf="@id/style_hour_bt"
+        android:text="@string/style_minute_bt" />
+
+    <Button
+        android:id="@+id/style_second_bt"
+        style="@style/StyleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@id/style_minute_bt"
+        android:layout_toRightOf="@id/style_minute_bt"
+        android:text="@string/style_second_bt" />
 
 </RelativeLayout>
