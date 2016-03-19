@@ -65,7 +65,7 @@ dependencies {
 </RelativeLayout>
 ```
 
-![TextureView_2](https://github.com/CaMnter/EasyCountDownTextureView/raw/master/screenshot/textureview_2.gif) 
+![TextureView_1](https://github.com/CaMnter/EasyCountDownTextureView/raw/master/screenshot/textureview_1.gif) 
   
 ```xml
 <com.camnter.easycountdowntextureview.EasyCountDownTextureView
@@ -86,7 +86,7 @@ dependencies {
     app:easyCountTimeSize="20sp" />
 ```
   
-![TextureView_1](https://github.com/CaMnter/EasyCountDownTextureView/raw/master/screenshot/textureview_1.gif) 
+![TextureView_2](https://github.com/CaMnter/EasyCountDownTextureView/raw/master/screenshot/textureview_2.gif) 
 
 
 ## Performance
