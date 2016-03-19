@@ -1,8 +1,7 @@
 EasyCountDownTextureView
 ==
 
-![Language](https://img.shields.io/badge/language-Java-EE0000.svg) 
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/CaMnter/EasyCountDownTextureView/blob/master/LICENSE)
+![Language](https://img.shields.io/badge/language-Java-EE0000.svg) [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/CaMnter/EasyCountDownTextureView/blob/master/LICENSE) 
 ![Version](https://img.shields.io/badge/version-1.1-8470FF.svg) 
 [ ![Download](https://api.bintray.com/packages/camnter/maven/EasyCountDownTextureView/images/download.svg) ](https://bintray.com/camnter/maven/EasyCountDownTextureView/_latestVersion)   
 
@@ -39,6 +38,55 @@ dependencies {
     <attr name="easyCountSecond" format="integer" />
 </declare-styleable>
 ```
+
+## Easy use
+ 
+```xml
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="50dp"
+    android:background="#ffffffff">
+
+    <ImageView
+        android:layout_width="196dp"
+        android:layout_height="158dp"
+        android:layout_marginTop="26dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/bg_fruit" />
+
+    <com.camnter.easycountdowntextureview.EasyCountDownTextureView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:easyCountHour="6"
+        app:easyCountMinute="6"
+        app:easyCountSecond="26" />
+
+</RelativeLayout>
+```
+
+![TextureView_2](https://github.com/CaMnter/EasyCountDownTextureView/raw/master/screenshot/textureview_2.gif) 
+  
+```xml
+<com.camnter.easycountdowntextureview.EasyCountDownTextureView
+    android:id="@+id/style_tv"
+    android:layout_width="132dp"
+    android:layout_height="36dp"
+    app:easyCountBackgroundColor="#ffdddddd"
+    app:easyCountColonColor="#ffdddddd"
+    app:easyCountColonSize="20sp"
+    app:easyCountHour="6"
+    app:easyCountMinute="6"
+    app:easyCountRectHeight="34dp"
+    app:easyCountRectRadius="5dp"
+    app:easyCountRectSpacing="12dp"
+    app:easyCountRectWidth="36dp"
+    app:easyCountSecond="26"
+    app:easyCountTimeColor="#ff3A94FF"
+    app:easyCountTimeSize="20sp" />
+```
+  
+![TextureView_1](https://github.com/CaMnter/EasyCountDownTextureView/raw/master/screenshot/textureview_1.gif) 
 
 
 ## Performance
