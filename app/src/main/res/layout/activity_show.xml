@@ -17,14 +17,14 @@
             android:layout_height="158dp"
             android:layout_marginTop="26dp"
             android:scaleType="centerCrop"
-            android:src="@mipmap/bg_fruit" />
+            android:src="@mipmap/bg_fruit"/>
 
         <com.camnter.easycountdowntextureview.EasyCountDownTextureView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:easyCountHour="6"
             app:easyCountMinute="6"
-            app:easyCountSecond="26" />
+            app:easyCountSecond="26"/>
 
     </RelativeLayout>
 

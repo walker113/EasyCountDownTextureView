@@ -26,7 +26,7 @@
         app:easyCountRectWidth="36dp"
         app:easyCountSecond="26"
         app:easyCountTimeColor="#ff3A94FF"
-        app:easyCountTimeSize="20sp" />
+        app:easyCountTimeSize="20sp"/>
 
     <Button
         android:id="@+id/style_hour_bt"
@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="@string/style_hour_bt" />
+        android:text="@string/style_hour_bt"/>
 
     <Button
         android:id="@+id/style_minute_bt"
@@ -44,7 +44,7 @@
         android:layout_alignParentBottom="true"
         android:layout_toEndOf="@id/style_hour_bt"
         android:layout_toRightOf="@id/style_hour_bt"
-        android:text="@string/style_minute_bt" />
+        android:text="@string/style_minute_bt"/>
 
     <Button
         android:id="@+id/style_second_bt"
@@ -54,6 +54,6 @@
         android:layout_alignParentBottom="true"
         android:layout_toEndOf="@id/style_minute_bt"
         android:layout_toRightOf="@id/style_minute_bt"
-        android:text="@string/style_second_bt" />
+        android:text="@string/style_second_bt"/>
 
 </RelativeLayout>

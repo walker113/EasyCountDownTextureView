@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-
 import com.camnter.easycountdowntextureview.EasyCountDownTextureView;
 
 /**
@@ -16,8 +15,8 @@ public class StyleActivity extends AppCompatActivity implements View.OnClickList
 
     private EasyCountDownTextureView styleTv;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+
+    @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_style);
         this.styleTv = (EasyCountDownTextureView) this.findViewById(R.id.style_tv);
@@ -26,13 +25,13 @@ public class StyleActivity extends AppCompatActivity implements View.OnClickList
         this.findViewById(R.id.style_second_bt).setOnClickListener(this);
     }
 
+
     /**
      * Called when a view has been clicked.
      *
      * @param v The view that was clicked.
      */
-    @Override
-    public void onClick(View v) {
+    @Override public void onClick(View v) {
         switch (v.getId()) {
             case R.id.style_hour_bt:
                 this.styleTv.setTimeHour(1);
