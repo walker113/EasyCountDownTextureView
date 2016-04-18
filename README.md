@@ -94,8 +94,8 @@ dependencies {
 
 Without scrolling, only time in the refreshing
 
-![EasyCounDownTextureView](https://github.com/CaMnter/EasyCountDownTextureView/raw/master/screenshot/easy_count_down_textureview.png) 
-![ShoujiTaobao](https://github.com/CaMnter/EasyCountDownTextureView/raw/master/screenshot/shouji_taobao.png)
+<img src="http://ww1.sinaimg.cn/large/006lPEc9gw1f30vnkpd1ej31ay298k20.jpg" width="420x"/> 
+<img src="http://ww4.sinaimg.cn/large/006lPEc9gw1f30vo7yaqaj31ay298wzw.jpg" width="420x"/>
 
 ## License
 
