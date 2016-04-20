@@ -5,4 +5,6 @@
     <string name="style_hour_bt">H = 01</string>
     <string name="style_minute_bt">M = 01</string>
     <string name="style_second_bt">S = 01</string>
+    <string name="style_start_bt">Start</string>
+    <string name="style_stop_bt">Stop</string>
 </resources>

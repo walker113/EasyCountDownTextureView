@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 import com.camnter.easycountdowntextureview.EasyCountDownTextureView;
 
 /**
@@ -11,7 +12,8 @@ import com.camnter.easycountdowntextureview.EasyCountDownTextureView;
  * Created by：CaMnter
  * Time：2016-03-17 17:20
  */
-public class StyleActivity extends AppCompatActivity implements View.OnClickListener {
+public class StyleActivity extends AppCompatActivity
+        implements View.OnClickListener, EasyCountDownTextureView.EasyCountDownListener {
 
     private EasyCountDownTextureView styleTv;
 
@@ -23,6 +25,9 @@ public class StyleActivity extends AppCompatActivity implements View.OnClickList
         this.findViewById(R.id.style_hour_bt).setOnClickListener(this);
         this.findViewById(R.id.style_minute_bt).setOnClickListener(this);
         this.findViewById(R.id.style_second_bt).setOnClickListener(this);
+        this.findViewById(R.id.style_start_bt).setOnClickListener(this);
+        this.findViewById(R.id.style_stop_bt).setOnClickListener(this);
+        this.styleTv.setEasyCountDownListener(this);
     }
 
 
@@ -42,6 +47,30 @@ public class StyleActivity extends AppCompatActivity implements View.OnClickList
             case R.id.style_second_bt:
                 this.styleTv.setTimeSecond(1);
                 break;
+            case R.id.style_start_bt:
+                this.styleTv.start();
+                break;
+            case R.id.style_stop_bt:
+                this.styleTv.stop();
+                break;
         }
+    }
+
+
+    /**
+     * When count down start
+     */
+    @Override public void onCountDownStart() {
+        Toast.makeText(StyleActivity.this, "onCountDownStart", Toast.LENGTH_SHORT).show();
+    }
+
+
+    /**
+     * When count down stop
+     *
+     * @param millisInFuture millisInFuture
+     */
+    @Override public void onCountDownStop(long millisInFuture) {
+        Toast.makeText(StyleActivity.this, "onCountDownStop", Toast.LENGTH_SHORT).show();
     }
 }
