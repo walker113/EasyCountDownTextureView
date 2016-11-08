@@ -117,8 +117,11 @@ public class EasyCountDownTextureView extends TextureView
     private Paint backgroundPaint;
     private RectF backgroundRectF;
 
-    private volatile long lastRecordTime = 0;
+    private volatile long lastRecordTime = 0L;
     private boolean runningState = false;
+
+    private boolean autoResume = true;
+    private long resumeTime = 0L;
 
     private EasyCountDownListener mEasyCountDownListener;
 
@@ -340,6 +343,10 @@ public class EasyCountDownTextureView extends TextureView
 
 
     @Override public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+        if (this.resumeTime > 0) {
+            this.mMillisInFuture += (SystemClock.elapsedRealtime() - this.resumeTime);
+            this.resumeTime = 0;
+        }
         this.start();
     }
 
@@ -351,6 +358,9 @@ public class EasyCountDownTextureView extends TextureView
 
 
     @Override public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        if (this.autoResume) {
+            this.resumeTime = SystemClock.elapsedRealtime();
+        }
         this.stop();
         return true;
     }
