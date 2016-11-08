@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EasyRecyclerView mainRv;
+    private EasyRecyclerView mainRecyclerView;
     private MainAdapter mainAdapter;
     private ArrayList<Class> classes;
 
@@ -27,11 +27,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initViews() {
-        this.mainRv = (EasyRecyclerView) this.findViewById(R.id.main_rv);
+        this.mainRecyclerView = (EasyRecyclerView) this.findViewById(R.id.main_rv);
         EasyDividerItemDecoration decoration = new EasyDividerItemDecoration(this,
                 EasyDividerItemDecoration.VERTICAL_LIST);
         decoration.bottomDivider = true;
-        this.mainRv.addItemDecoration(decoration);
+        this.mainRecyclerView.addItemDecoration(decoration);
     }
 
 
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.mainAdapter = new MainAdapter();
         this.mainAdapter.setList(this.classes);
-        this.mainRv.setAdapter(this.mainAdapter);
+        this.mainRecyclerView.setAdapter(this.mainAdapter);
     }
 
 
