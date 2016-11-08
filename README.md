@@ -1,18 +1,25 @@
 EasyCountDownTextureView
 ==
-
+   
+<br/>
+   
 ![Language](https://img.shields.io/badge/language-Java-EE0000.svg) [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/CaMnter/EasyCountDownTextureView/blob/master/LICENSE) 
-![Version](https://img.shields.io/badge/version-1.2-8470FF.svg) 
+![Version](https://img.shields.io/badge/version-1.3-8470FF.svg) 
 ![SDK](https://img.shields.io/badge/SDK-14%2B-orange.svg) 
 [ ![Download](https://api.bintray.com/packages/camnter/maven/EasyCountDownTextureView/images/download.svg) ](https://bintray.com/camnter/maven/EasyCountDownTextureView/_latestVersion)   
-
+   
+<br/>
+   
 **Easy count down by TextureView**
-
+   
+<br/>
+   
 ## Attention
 
 **minSdkVersion >= 14**
-
-
+   
+<br/>
+   
 ## Gradle
 
 ```groovy
@@ -20,7 +27,9 @@ dependencies {
 	compile 'com.camnter.easycountdowntextureview:library:1.2'
 }
 ```
-
+   
+<br/>
+   
 ## Attributes
 
 ```xml
@@ -39,7 +48,9 @@ dependencies {
     <attr name="easyCountSecond" format="integer" />
 </declare-styleable>
 ```
-
+   
+<br/>
+   
 ## Easy use
  
 ```xml
@@ -65,7 +76,8 @@ dependencies {
 
 </RelativeLayout>
 ```
-
+   
+   
 ![TextureView_1](https://github.com/CaMnter/EasyCountDownTextureView/raw/master/screenshot/textureview_1.gif) 
   
 ```xml
@@ -88,15 +100,18 @@ dependencies {
 ```
   
 ![TextureView_2](https://github.com/CaMnter/EasyCountDownTextureView/raw/master/screenshot/textureview_2.gif) 
-
-
+   
+<br/>
+   
 ## Performance
 
 Without scrolling, only time in the refreshing
 
 <img src="http://ww1.sinaimg.cn/large/006lPEc9gw1f30vnkpd1ej31ay298k20.jpg" width="420x"/> 
 <img src="http://ww4.sinaimg.cn/large/006lPEc9gw1f30vo7yaqaj31ay298wzw.jpg" width="420x"/>
-
+   
+<br/>
+   
 ## License
 
       Copyright (C) 2016 CaMnter yuanyu.camnter@gmail.com
