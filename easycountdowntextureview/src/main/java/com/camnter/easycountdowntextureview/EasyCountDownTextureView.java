@@ -121,7 +121,7 @@ public class EasyCountDownTextureView extends TextureView
     private boolean runningState = false;
 
     private boolean autoResume = true;
-    private long resumeTime = 0L;
+    private long pauseTime = 0L;
 
     private EasyCountDownListener mEasyCountDownListener;
 
@@ -322,6 +322,11 @@ public class EasyCountDownTextureView extends TextureView
     }
 
 
+    public void setAutoResume(boolean autoResume) {
+        this.autoResume = autoResume;
+    }
+
+
     public void setEasyCountDownListener(EasyCountDownListener easyCountDownListener) {
         this.mEasyCountDownListener = easyCountDownListener;
     }
@@ -343,9 +348,9 @@ public class EasyCountDownTextureView extends TextureView
 
 
     @Override public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-        if (this.resumeTime > 0) {
-            this.mMillisInFuture += (SystemClock.elapsedRealtime() - this.resumeTime);
-            this.resumeTime = 0;
+        if (this.pauseTime > 0) {
+            this.mMillisInFuture += (SystemClock.elapsedRealtime() - this.pauseTime);
+            this.pauseTime = 0;
         }
         this.start();
     }
@@ -359,7 +364,7 @@ public class EasyCountDownTextureView extends TextureView
 
     @Override public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
         if (this.autoResume) {
-            this.resumeTime = SystemClock.elapsedRealtime();
+            this.pauseTime = SystemClock.elapsedRealtime();
         }
         this.stop();
         return true;
@@ -397,6 +402,11 @@ public class EasyCountDownTextureView extends TextureView
             this.mEasyCountDownListener.onCountDownStop(this.mMillisInFuture);
         }
         this.runningState = false;
+    }
+
+
+    private void savePauseTime() {
+
     }
 
 

@@ -24,7 +24,7 @@ EasyCountDownTextureView
 
 ```groovy
 dependencies {
-	compile 'com.camnter.easycountdowntextureview:library:1.2'
+	compile 'com.camnter.easycountdowntextureview:easycountdowntextureview:1.4'
 }
 ```
    
