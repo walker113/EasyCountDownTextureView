@@ -14,18 +14,25 @@ import com.camnter.easycountdowntextureview.EasyCountDownTextureView;
 public class CompletedActivity extends AppCompatActivity
     implements EasyCountDownTextureView.EasyCountDownListener {
 
-    private static final long DURATION_TIME = 6 * 1000;
+    private static final long WHITE_DURATION_TIME = 6 * 1000;
+    private static final long YELLOW_DURATION_TIME = 12 * 1000;
     private static final String TAG = CompletedActivity.class.getSimpleName();
 
 
     @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_completed);
-        EasyCountDownTextureView easyCountDownTextureView
-            = (EasyCountDownTextureView) this.findViewById(R.id.completed_countdown_text);
-        easyCountDownTextureView.setTime(DURATION_TIME);
-        easyCountDownTextureView.setEasyCountDownListener(this);
-        easyCountDownTextureView.start();
+        EasyCountDownTextureView whiteCountDownTextureView
+            = (EasyCountDownTextureView) this.findViewById(R.id.completed_white_countdown_text);
+        whiteCountDownTextureView.setTime(WHITE_DURATION_TIME);
+        whiteCountDownTextureView.setEasyCountDownListener(this);
+        whiteCountDownTextureView.start();
+
+        EasyCountDownTextureView yellowCountDownTextureView
+            = (EasyCountDownTextureView) this.findViewById(R.id.completed_yellow_countdown_text);
+        yellowCountDownTextureView.setTime(YELLOW_DURATION_TIME);
+        yellowCountDownTextureView.setEasyCountDownListener(this);
+        yellowCountDownTextureView.start();
     }
 
 
@@ -51,7 +58,7 @@ public class CompletedActivity extends AppCompatActivity
      * When count down completed
      */
     @Override public void onCountDownCompleted() {
-        Toast.makeText(this,"[" + TAG + "]      [onCountDownCompleted]",Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "[" + TAG + "]      [onCountDownCompleted]", Toast.LENGTH_LONG).show();
     }
 
 }

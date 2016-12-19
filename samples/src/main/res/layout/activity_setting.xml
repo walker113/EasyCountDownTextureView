@@ -27,7 +27,7 @@
     tools:context="com.camnter.easycountdowntextureview.demo.SettingActivity">
 
     <com.camnter.easycountdowntextureview.EasyCountDownTextureView
-        android:id="@+id/completed_countdown_text"
+        android:id="@+id/setting_countdown_text"
         android:layout_width="132dp"
         android:layout_height="36dp"
         resAuto:easyCountBackgroundColor="#ffdddddd"
