@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private void initData() {
         this.classes = new ArrayList<>();
         this.classes.add(ShowActivity.class);
-        this.classes.add(StyleActivity.class);
+        this.classes.add(SettingActivity.class);
 
         this.mainAdapter = new MainAdapter();
         this.mainAdapter.setList(this.classes);

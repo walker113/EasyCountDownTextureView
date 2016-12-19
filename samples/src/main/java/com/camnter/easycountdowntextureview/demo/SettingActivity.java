@@ -8,27 +8,28 @@ import android.view.View;
 import com.camnter.easycountdowntextureview.EasyCountDownTextureView;
 
 /**
- * Description：StyleActivity
+ * Description：SettingActivity
  * Created by：CaMnter
  * Time：2016-03-17 17:20
  */
-public class StyleActivity extends AppCompatActivity
+public class SettingActivity extends AppCompatActivity
     implements View.OnClickListener, EasyCountDownTextureView.EasyCountDownListener {
 
     private static final String TAG = "StyleActivity";
-    private EasyCountDownTextureView styleText;
+    private EasyCountDownTextureView countdownText;
 
 
     @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_style);
-        this.styleText = (EasyCountDownTextureView) this.findViewById(R.id.style_tv);
-        this.findViewById(R.id.style_hour_bt).setOnClickListener(this);
-        this.findViewById(R.id.style_minute_bt).setOnClickListener(this);
-        this.findViewById(R.id.style_second_bt).setOnClickListener(this);
-        this.findViewById(R.id.style_start_bt).setOnClickListener(this);
-        this.findViewById(R.id.style_stop_bt).setOnClickListener(this);
-        this.styleText.setEasyCountDownListener(this);
+        this.setContentView(R.layout.activity_setting);
+        this.countdownText = (EasyCountDownTextureView) this.findViewById(
+            R.id.setting_countdown_text);
+        this.findViewById(R.id.setting_hour_button).setOnClickListener(this);
+        this.findViewById(R.id.setting_minute_button).setOnClickListener(this);
+        this.findViewById(R.id.setting_second_button).setOnClickListener(this);
+        this.findViewById(R.id.setting_start_button).setOnClickListener(this);
+        this.findViewById(R.id.setting_stop_button).setOnClickListener(this);
+        this.countdownText.setEasyCountDownListener(this);
     }
 
 
@@ -39,20 +40,20 @@ public class StyleActivity extends AppCompatActivity
      */
     @Override public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.style_hour_bt:
-                this.styleText.setTimeHour(1);
+            case R.id.setting_hour_button:
+                this.countdownText.setTimeHour(1);
                 break;
-            case R.id.style_minute_bt:
-                this.styleText.setTimeMinute(1);
+            case R.id.setting_minute_button:
+                this.countdownText.setTimeMinute(1);
                 break;
-            case R.id.style_second_bt:
-                this.styleText.setTimeSecond(1);
+            case R.id.setting_second_button:
+                this.countdownText.setTimeSecond(1);
                 break;
-            case R.id.style_start_bt:
-                this.styleText.start();
+            case R.id.setting_start_button:
+                this.countdownText.start();
                 break;
-            case R.id.style_stop_bt:
-                this.styleText.stop();
+            case R.id.setting_stop_button:
+                this.countdownText.stop();
                 break;
         }
     }
@@ -74,4 +75,5 @@ public class StyleActivity extends AppCompatActivity
     @Override public void onCountDownStop(long millisInFuture) {
         Log.i(TAG, "[" + TAG + "]      [onCountDownStop]");
     }
+
 }
