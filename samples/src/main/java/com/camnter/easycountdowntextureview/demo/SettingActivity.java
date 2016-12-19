@@ -76,4 +76,12 @@ public class SettingActivity extends AppCompatActivity
         Log.i(TAG, "[" + TAG + "]      [onCountDownStop]");
     }
 
+
+    /**
+     * When count down completed
+     */
+    @Override public void onCountDownCompleted() {
+
+    }
+
 }

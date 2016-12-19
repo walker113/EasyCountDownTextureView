@@ -25,17 +25,27 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.os.SystemClock;
+import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.TextureView;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import static com.camnter.easycountdowntextureview.EasyCountDownTextureView.MainHandler.WHAT_COUNT_DOWN_COMPLETED;
 
 /**
  * Description：EasyCountDownTextureView
@@ -90,7 +100,6 @@ public class EasyCountDownTextureView extends TextureView
     private float rectHeight;
     private float rectSpacing;
     private float rectRadius;
-    private float rectBorderSize;
     private boolean drawRectBorder = false;
 
     private float paddingLeft;
@@ -134,6 +143,46 @@ public class EasyCountDownTextureView extends TextureView
     private long pauseTime = 0L;
 
     private EasyCountDownListener mEasyCountDownListener;
+
+
+    static class MainHandler extends Handler {
+
+        static final int WHAT_COUNT_DOWN_COMPLETED = 0x26;
+
+        private final WeakReference<EasyCountDownListener> listenerReference;
+
+
+        @IntDef(WHAT_COUNT_DOWN_COMPLETED)
+        @Retention(RetentionPolicy.SOURCE)
+        private @interface WhatType {
+
+        }
+
+
+        MainHandler(@NonNull EasyCountDownListener easyCountDownListener) {
+            super(Looper.getMainLooper());
+            this.listenerReference = new WeakReference<>(easyCountDownListener);
+        }
+
+
+        /**
+         * Handle system messages here.
+         */
+        @Override public void dispatchMessage(Message msg) {
+            switch (msg.what) {
+                case WHAT_COUNT_DOWN_COMPLETED:
+                    final EasyCountDownListener easyCountDownListener
+                        = this.listenerReference.get();
+                    if (easyCountDownListener == null) return;
+                    easyCountDownListener.onCountDownCompleted();
+                    break;
+            }
+        }
+
+    }
+
+
+    private MainHandler mainHandler;
 
 
     public EasyCountDownTextureView(Context context) {
@@ -241,15 +290,16 @@ public class EasyCountDownTextureView extends TextureView
 
 
     private void initRectBorderPaint(@NonNull final TypedArray typedArray) {
-        this.rectBorderPaint = new Paint();
-        this.rectBorderSize = typedArray.getDimension(
+        final float rectBorderSize = typedArray.getDimension(
             R.styleable.EasyCountDownTextureView_easyCountRectBorderSize, Float.MIN_VALUE);
-        this.checkRectBorder(this.rectBorderSize);
+        this.checkRectBorder(rectBorderSize);
         if (!this.drawRectBorder) return;
+        this.rectBorderPaint = new Paint();
         this.rectBorderPaint.setAntiAlias(true);
         this.rectBorderPaint.setColor(
             typedArray.getColor(R.styleable.EasyCountDownTextureView_easyCountRectBorderColor,
                 DEFAULT_COLOR_RECT_BORDER));
+        this.rectBorderPaint.setTextSize(rectBorderSize);
         this.rectBorderPaint.setStyle(Paint.Style.STROKE);
         this.rectBorderPaint.setTextAlign(Paint.Align.CENTER);
         this.rectBorderPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -390,6 +440,7 @@ public class EasyCountDownTextureView extends TextureView
 
     public void setEasyCountDownListener(EasyCountDownListener easyCountDownListener) {
         this.mEasyCountDownListener = easyCountDownListener;
+        this.mainHandler = new MainHandler(easyCountDownListener);
     }
 
 
@@ -553,7 +604,12 @@ public class EasyCountDownTextureView extends TextureView
                             if (mMillisInFuture < 0) {
                                 this.completed = true;
                                 this.running = false;
+                                if (mainHandler != null) {
+                                    mainHandler.sendEmptyMessageDelayed(WHAT_COUNT_DOWN_COMPLETED,
+                                        1000);
+                                }
                             }
+
                             final long pastTime = SystemClock.uptimeMillis() - lastRecordTime;
                             if (pastTime < COUNT_DOWN_INTERVAL) {
                                 this.wait(COUNT_DOWN_INTERVAL - pastTime);
@@ -626,7 +682,8 @@ public class EasyCountDownTextureView extends TextureView
     private void drawRectBorder(@NonNull final Canvas canvas,
                                 @NonNull final RectF rect,
                                 final float rectRadius,
-                                @NonNull Paint paint) {
+                                @Nullable Paint paint) {
+        if (paint == null) return;
         if (rectRadius > 0) {
             canvas.drawRoundRect(rect, rectRadius, rectRadius, paint);
         } else {
@@ -647,6 +704,7 @@ public class EasyCountDownTextureView extends TextureView
 
 
     public interface EasyCountDownListener {
+
         /**
          * When count down start
          */
@@ -658,6 +716,11 @@ public class EasyCountDownTextureView extends TextureView
          * @param millisInFuture millisInFuture
          */
         void onCountDownStop(long millisInFuture);
+
+        /**
+         * When count down completed
+         */
+        void onCountDownCompleted();
     }
 
 }
