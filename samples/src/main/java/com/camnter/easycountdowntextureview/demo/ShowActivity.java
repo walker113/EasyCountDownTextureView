@@ -10,8 +10,10 @@ import android.support.v7.app.AppCompatActivity;
  * Time：2016-03-18 13:28
  */
 public class ShowActivity extends AppCompatActivity {
+
     @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_show);
     }
+
 }

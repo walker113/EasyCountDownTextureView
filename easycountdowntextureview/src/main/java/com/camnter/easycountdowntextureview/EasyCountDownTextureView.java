@@ -116,6 +116,7 @@ public class EasyCountDownTextureView extends TextureView
 
     private Paint timePaint;
     private float timePaintBaseLine;
+    private float timePaintBaseLineFixed;
 
     private Paint backgroundPaint;
     private RectF backgroundRectF;
@@ -184,7 +185,7 @@ public class EasyCountDownTextureView extends TextureView
                 DEFAULT_COLOR_COLON));
         this.colonPaint.setTextSize(
             a.getDimension(R.styleable.EasyCountDownTextureView_easyCountColonSize,
-                this.sp2px(DEFAULT_TIME_TEXT_SIZE)));
+                this.dp2px(DEFAULT_TIME_TEXT_SIZE)));
         this.colonPaint.setStrokeWidth(this.dp2px(DEFAULT_COLON_PAINT_WIDTH));
         this.colonPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         this.colonPaint.setTextAlign(Paint.Align.CENTER);
@@ -204,7 +205,7 @@ public class EasyCountDownTextureView extends TextureView
             DEFAULT_COLOR_TIME));
         this.timePaint.setTextSize(
             a.getDimension(R.styleable.EasyCountDownTextureView_easyCountTimeSize,
-                this.sp2px(DEFAULT_COLON_TEXT_SIZE)));
+                this.dp2px(DEFAULT_COLON_TEXT_SIZE)));
         this.timePaint.setStrokeWidth(this.dp2px(DEFAULT_TIME_PAINT_WIDTH));
         this.timePaint.setStyle(Paint.Style.FILL_AND_STROKE);
         this.timePaint.setTextAlign(Paint.Align.CENTER);
@@ -212,6 +213,8 @@ public class EasyCountDownTextureView extends TextureView
         final Paint.FontMetricsInt timePaintFontMetrics = this.timePaint.getFontMetricsInt();
         this.timePaintBaseLine = (this.backgroundRectF.bottom + this.backgroundRectF.top -
             timePaintFontMetrics.bottom - timePaintFontMetrics.top) / 2;
+        // for colon
+        this.timePaintBaseLineFixed = this.timePaintBaseLine / 40 * 37;
 
         this.rectRadius = a.getDimension(R.styleable.EasyCountDownTextureView_easyCountRectRadius,
             this.dp2px(DEFAULT_ROUND_RECT_RADIUS));
@@ -255,20 +258,24 @@ public class EasyCountDownTextureView extends TextureView
         float resultHeight;
 
         switch (widthMode) {
+            // wrap_content
             case MeasureSpec.AT_MOST:
             case MeasureSpec.UNSPECIFIED:
                 resultWidth = this.defaultWrapContentWidth;
                 break;
+            // match_parent
             case MeasureSpec.EXACTLY:
             default:
                 resultWidth = Math.max(this.viewWidth, this.defaultWrapContentWidth);
                 break;
         }
         switch (heightMode) {
+            // wrap_content
             case MeasureSpec.AT_MOST:
             case MeasureSpec.UNSPECIFIED:
                 resultHeight = this.defaultWrapContentHeight;
                 break;
+            // match_parent
             case MeasureSpec.EXACTLY:
             default:
                 resultHeight = Math.max(this.viewHeight, this.defaultWrapContentHeight);
@@ -529,7 +536,7 @@ public class EasyCountDownTextureView extends TextureView
 
         canvas.save();
         canvas.translate(firstTranslateColonX, paddingTop);
-        canvas.drawText(COLON, 0, timePaintBaseLine, colonPaint);
+        canvas.drawText(COLON, 0, timePaintBaseLineFixed, colonPaint);
         canvas.restore();
 
         canvas.save();
@@ -540,7 +547,7 @@ public class EasyCountDownTextureView extends TextureView
 
         canvas.save();
         canvas.translate(secondTranslateColonX, paddingTop);
-        canvas.drawText(COLON, 0, timePaintBaseLine, colonPaint);
+        canvas.drawText(COLON, 0, timePaintBaseLineFixed, colonPaint);
         canvas.restore();
 
         canvas.save();
@@ -559,17 +566,6 @@ public class EasyCountDownTextureView extends TextureView
      */
     private float dp2px(float dp) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, this.mMetrics);
-    }
-
-
-    /**
-     * Sp to px
-     *
-     * @param sp sp
-     * @return sp
-     */
-    private float sp2px(float sp) {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, this.mMetrics);
     }
 
 

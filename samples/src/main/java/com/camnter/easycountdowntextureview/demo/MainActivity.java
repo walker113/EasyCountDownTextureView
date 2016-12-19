@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         this.classes = new ArrayList<>();
         this.classes.add(ShowActivity.class);
         this.classes.add(SettingActivity.class);
+        this.classes.add(CompletedActivity.class);
 
         this.mainAdapter = new MainAdapter();
         this.mainAdapter.setList(this.classes);
@@ -54,4 +55,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 }

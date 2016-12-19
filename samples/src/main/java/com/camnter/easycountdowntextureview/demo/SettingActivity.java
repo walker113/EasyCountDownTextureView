@@ -23,7 +23,7 @@ public class SettingActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_setting);
         this.countdownText = (EasyCountDownTextureView) this.findViewById(
-            R.id.setting_countdown_text);
+            R.id.completed_countdown_text);
         this.findViewById(R.id.setting_hour_button).setOnClickListener(this);
         this.findViewById(R.id.setting_minute_button).setOnClickListener(this);
         this.findViewById(R.id.setting_second_button).setOnClickListener(this);
