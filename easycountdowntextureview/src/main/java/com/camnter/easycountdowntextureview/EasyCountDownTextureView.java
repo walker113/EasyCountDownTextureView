@@ -27,6 +27,7 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.TextureView;
 import java.util.Calendar;
@@ -41,6 +42,8 @@ import java.util.TimeZone;
  */
 public class EasyCountDownTextureView extends TextureView
     implements TextureView.SurfaceTextureListener {
+
+    private static final String TAG = EasyCountDownTextureView.class.getSimpleName();
 
     private static final String LESS_THAN_TEN_FORMAT = "%02d";
     private static final String COLON = ":";
@@ -396,17 +399,13 @@ public class EasyCountDownTextureView extends TextureView
     public void stop() {
         if (!this.runningState) return;
         if (this.mThread != null) {
-            this.mThread.stopThread();
+            this.mThread.interrupt();
+            this.mThread = null;
         }
         if (this.mEasyCountDownListener != null) {
             this.mEasyCountDownListener.onCountDownStop(this.mMillisInFuture);
         }
         this.runningState = false;
-    }
-
-
-    private void savePauseTime() {
-
     }
 
 
@@ -503,6 +502,9 @@ public class EasyCountDownTextureView extends TextureView
                             }
                             lastRecordTime = SystemClock.uptimeMillis();
                         }
+                    } catch (InterruptedException interruptedException) {
+                        Log.i(TAG, "[run]\t\t\t thread interrupted", interruptedException);
+                        this.stopThread();
                     } catch (Exception e) {
                         e.printStackTrace();
                     } finally {
@@ -584,4 +586,5 @@ public class EasyCountDownTextureView extends TextureView
          */
         void onCountDownStop(long millisInFuture);
     }
+
 }
