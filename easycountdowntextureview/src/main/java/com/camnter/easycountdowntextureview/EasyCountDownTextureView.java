@@ -29,7 +29,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
-import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -37,8 +36,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.TextureView;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.Date;
@@ -137,7 +134,7 @@ public class EasyCountDownTextureView extends TextureView
     private RectF backgroundRectF;
 
     private volatile long lastRecordTime = 0L;
-    private boolean runningState = false;
+    private volatile boolean runningState = false;
 
     private boolean autoResume = true;
     private long pauseTime = 0L;
@@ -150,13 +147,6 @@ public class EasyCountDownTextureView extends TextureView
         static final int WHAT_COUNT_DOWN_COMPLETED = 0x26;
 
         private final WeakReference<EasyCountDownListener> listenerReference;
-
-
-        @IntDef(WHAT_COUNT_DOWN_COMPLETED)
-        @Retention(RetentionPolicy.SOURCE)
-        private @interface WhatType {
-
-        }
 
 
         MainHandler(@NonNull EasyCountDownListener easyCountDownListener) {
@@ -542,12 +532,14 @@ public class EasyCountDownTextureView extends TextureView
     private void drawZeroZeroZero() {
         Canvas canvas = null;
         try {
-            canvas = EasyCountDownTextureView.this.lockCanvas();
-            if (canvas == null) return;
-            this.drawTimeAndBackground(canvas, String.format(locale, LESS_THAN_TEN_FORMAT, 0),
-                String.format(locale, LESS_THAN_TEN_FORMAT, 0),
-                String.format(locale, LESS_THAN_TEN_FORMAT, 0));
-            unlockCanvasAndPost(canvas);
+            synchronized (this) {
+                canvas = EasyCountDownTextureView.this.lockCanvas();
+                if (canvas == null) return;
+                this.drawTimeAndBackground(canvas, String.format(locale, LESS_THAN_TEN_FORMAT, 0),
+                    String.format(locale, LESS_THAN_TEN_FORMAT, 0),
+                    String.format(locale, LESS_THAN_TEN_FORMAT, 0));
+                unlockCanvasAndPost(canvas);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             unlockCanvasAndPost(canvas);
@@ -721,6 +713,7 @@ public class EasyCountDownTextureView extends TextureView
          * When count down completed
          */
         void onCountDownCompleted();
+
     }
 
 }
