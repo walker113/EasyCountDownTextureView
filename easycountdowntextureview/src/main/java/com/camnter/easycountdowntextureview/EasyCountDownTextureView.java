@@ -209,7 +209,7 @@ public class EasyCountDownTextureView extends TextureView
         this.timePaint.setStyle(Paint.Style.FILL_AND_STROKE);
         this.timePaint.setTextAlign(Paint.Align.CENTER);
         this.timePaint.setStrokeCap(Paint.Cap.ROUND);
-        Paint.FontMetricsInt timePaintFontMetrics = this.timePaint.getFontMetricsInt();
+        final Paint.FontMetricsInt timePaintFontMetrics = this.timePaint.getFontMetricsInt();
         this.timePaintBaseLine = (this.backgroundRectF.bottom + this.backgroundRectF.top -
             timePaintFontMetrics.bottom - timePaintFontMetrics.top) / 2;
 
@@ -248,8 +248,8 @@ public class EasyCountDownTextureView extends TextureView
 
         this.viewWidth = MeasureSpec.getSize(widthMeasureSpec);
         this.viewHeight = MeasureSpec.getSize(heightMeasureSpec);
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        final int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 
         float resultWidth;
         float resultHeight;
@@ -280,10 +280,10 @@ public class EasyCountDownTextureView extends TextureView
     }
 
 
-    @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        this.viewWidth = w;
-        this.viewHeight = h;
+    @Override protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+        super.onSizeChanged(width, height, oldWidth, oldHeight);
+        this.viewWidth = width;
+        this.viewHeight = height;
         this.refitBackgroundAttribute();
         this.invalidate();
     }
@@ -448,8 +448,8 @@ public class EasyCountDownTextureView extends TextureView
 
     private class EasyThread extends Thread {
 
-        volatile boolean running = false;
-        volatile boolean completed = false;
+        private volatile boolean running = false;
+        private volatile boolean completed = false;
 
 
         EasyThread() {
@@ -496,7 +496,7 @@ public class EasyCountDownTextureView extends TextureView
                                 this.completed = true;
                                 this.running = false;
                             }
-                            long pastTime = SystemClock.uptimeMillis() - lastRecordTime;
+                            final long pastTime = SystemClock.uptimeMillis() - lastRecordTime;
                             if (pastTime < COUNT_DOWN_INTERVAL) {
                                 this.wait(COUNT_DOWN_INTERVAL - pastTime);
                             }
