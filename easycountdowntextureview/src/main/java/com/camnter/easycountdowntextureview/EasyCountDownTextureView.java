@@ -119,7 +119,7 @@ public class EasyCountDownTextureView extends TextureView
     private EasyThread easyThread;
 
     private final Locale locale = Locale.getDefault();
-    private final Calendar mCalendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+00:00"));
+    private final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+00:00"));
 
     private Paint colonPaint;
     private Paint rectBorderPaint;
@@ -541,7 +541,7 @@ public class EasyCountDownTextureView extends TextureView
      */
     public void setTime(final long timeMillis) {
         this.millisInFuture = timeMillis;
-        this.mCalendar.setTimeInMillis(this.millisInFuture);
+        this.calendar.setTimeInMillis(this.millisInFuture);
     }
 
 
@@ -599,14 +599,22 @@ public class EasyCountDownTextureView extends TextureView
                         synchronized (this) {
                             canvas = EasyCountDownTextureView.this.lockCanvas();
                             if (canvas == null) continue;
-                            timeHour = mCalendar.get(Calendar.HOUR_OF_DAY);
-                            timeMinute = mCalendar.get(Calendar.MINUTE);
-                            timeSecond = mCalendar.get(Calendar.SECOND);
+                            timeHour = calendar.get(Calendar.HOUR_OF_DAY);
+                            timeMinute = calendar.get(Calendar.MINUTE);
+                            timeSecond = calendar.get(Calendar.SECOND);
                             drawTimeAndBackground(canvas,
                                 String.format(locale, LESS_THAN_TEN_FORMAT, timeHour),
                                 String.format(locale, LESS_THAN_TEN_FORMAT, timeMinute),
                                 String.format(locale, LESS_THAN_TEN_FORMAT, timeSecond));
 
+                            final long pastTime = SystemClock.uptimeMillis() - lastRecordTime;
+                            if (pastTime < COUNT_DOWN_INTERVAL) {
+                                this.wait(COUNT_DOWN_INTERVAL - pastTime);
+                            }
+
+                            lastRecordTime = SystemClock.uptimeMillis();
+                            // refresh time
+                            millisInFuture -= 1000;
                             if (millisInFuture < 0) {
                                 this.completed = true;
                                 this.running = false;
@@ -615,16 +623,10 @@ public class EasyCountDownTextureView extends TextureView
                                         MainHandler.WHAT_COUNT_DOWN_COMPLETED,
                                         1000);
                                 }
+                                calendar.setTimeInMillis(0);
+                            } else {
+                                calendar.setTimeInMillis(millisInFuture);
                             }
-
-                            final long pastTime = SystemClock.uptimeMillis() - lastRecordTime;
-                            if (pastTime < COUNT_DOWN_INTERVAL) {
-                                this.wait(COUNT_DOWN_INTERVAL - pastTime);
-                            }
-                            lastRecordTime = SystemClock.uptimeMillis();
-                            // refresh time
-                            millisInFuture -= 1000;
-                            mCalendar.setTimeInMillis(millisInFuture);
                         }
                     } catch (InterruptedException interruptedException) {
                         Log.i(TAG, "[run]\t\t\t thread interrupted", interruptedException);
