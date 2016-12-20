@@ -465,7 +465,7 @@ public class EasyCountDownTextureView extends TextureView
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         if (this.pauseTime > 0) {
-            this.millisInFuture += (SystemClock.elapsedRealtime() - this.pauseTime);
+            this.millisInFuture -= (SystemClock.elapsedRealtime() - this.pauseTime);
             this.pauseTime = 0;
         }
         this.start();
@@ -606,9 +606,6 @@ public class EasyCountDownTextureView extends TextureView
                                 String.format(locale, LESS_THAN_TEN_FORMAT, timeHour),
                                 String.format(locale, LESS_THAN_TEN_FORMAT, timeMinute),
                                 String.format(locale, LESS_THAN_TEN_FORMAT, timeSecond));
-                            // refresh time
-                            millisInFuture -= 1000;
-                            mCalendar.setTimeInMillis(millisInFuture);
 
                             if (millisInFuture < 0) {
                                 this.completed = true;
@@ -625,6 +622,9 @@ public class EasyCountDownTextureView extends TextureView
                                 this.wait(COUNT_DOWN_INTERVAL - pastTime);
                             }
                             lastRecordTime = SystemClock.uptimeMillis();
+                            // refresh time
+                            millisInFuture -= 1000;
+                            mCalendar.setTimeInMillis(millisInFuture);
                         }
                     } catch (InterruptedException interruptedException) {
                         Log.i(TAG, "[run]\t\t\t thread interrupted", interruptedException);
