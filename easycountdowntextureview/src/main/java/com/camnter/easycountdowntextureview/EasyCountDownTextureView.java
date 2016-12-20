@@ -63,9 +63,10 @@ public class EasyCountDownTextureView extends TextureView
 
     private static final int COUNT_DOWN_INTERVAL = 1000;
 
-    private static final long ONE_HOUR = 1000 * 60 * 60L;
-    private static final long ONE_MINUTE = 1000 * 60L;
     private static final long ONE_SECOND = 1000L;
+    private static final long ONE_MINUTE = 60 * ONE_SECOND;
+    private static final long ONE_HOUR = 60 * ONE_MINUTE;
+    private static final long ONE_DAY = 24 * ONE_HOUR;
 
     private volatile long millisInFuture = 0L;
 
@@ -496,6 +497,7 @@ public class EasyCountDownTextureView extends TextureView
             this.millisInFuture -= (SystemClock.elapsedRealtime() - this.pauseTime);
             this.pauseTime = 0;
         }
+        this.start();
     }
 
 
@@ -507,6 +509,7 @@ public class EasyCountDownTextureView extends TextureView
 
     public void start() {
         if (this.runningState) return;
+        this.drawZeroZeroZero();
         if (millisInFuture > 0) {
             this.easyThread = new EasyThread();
             this.easyThread.startThread();
@@ -516,7 +519,6 @@ public class EasyCountDownTextureView extends TextureView
                 this.easyCountDownListener.onCountDownStart();
             }
         } else {
-            this.drawZeroZeroZero();
             this.runningState = false;
         }
     }
@@ -559,14 +561,12 @@ public class EasyCountDownTextureView extends TextureView
     private void drawZeroZeroZero() {
         Canvas canvas = null;
         try {
-            synchronized (this) {
-                canvas = EasyCountDownTextureView.this.lockCanvas();
-                if (canvas == null) return;
-                this.drawTimeAndBackground(canvas, String.format(locale, LESS_THAN_TEN_FORMAT, 0),
-                    String.format(locale, LESS_THAN_TEN_FORMAT, 0),
-                    String.format(locale, LESS_THAN_TEN_FORMAT, 0));
-                unlockCanvasAndPost(canvas);
-            }
+            canvas = EasyCountDownTextureView.this.lockCanvas();
+            if (canvas == null) return;
+            this.drawTimeAndBackground(canvas, String.format(locale, LESS_THAN_TEN_FORMAT, 0),
+                String.format(locale, LESS_THAN_TEN_FORMAT, 0),
+                String.format(locale, LESS_THAN_TEN_FORMAT, 0));
+            unlockCanvasAndPost(canvas);
         } catch (Exception e) {
             e.printStackTrace();
             unlockCanvasAndPost(canvas);
@@ -601,6 +601,15 @@ public class EasyCountDownTextureView extends TextureView
         }
 
 
+        private int checkCalendarHour(final long millisInFuture, int calendarHour) {
+            final int days = (int) (millisInFuture / ONE_DAY);
+            if (days > 1) {
+                calendarHour += (days - 1) * 24;
+            }
+            return calendarHour;
+        }
+
+
         @Override
         public void run() {
             while (!this.completed) {
@@ -614,7 +623,8 @@ public class EasyCountDownTextureView extends TextureView
                             timeMinute = calendar.get(Calendar.MINUTE);
                             timeSecond = calendar.get(Calendar.SECOND);
                             drawTimeAndBackground(canvas,
-                                String.format(locale, LESS_THAN_TEN_FORMAT, timeHour),
+                                String.format(locale, LESS_THAN_TEN_FORMAT,
+                                    this.checkCalendarHour(millisInFuture, timeHour)),
                                 String.format(locale, LESS_THAN_TEN_FORMAT, timeMinute),
                                 String.format(locale, LESS_THAN_TEN_FORMAT, timeSecond));
 
