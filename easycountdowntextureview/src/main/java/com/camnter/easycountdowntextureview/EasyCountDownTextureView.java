@@ -158,7 +158,8 @@ public class EasyCountDownTextureView extends TextureView
         /**
          * Handle system messages here.
          */
-        @Override public void dispatchMessage(Message msg) {
+        @Override
+        public void dispatchMessage(Message msg) {
             switch (msg.what) {
                 case WHAT_COUNT_DOWN_COMPLETED:
                     final EasyCountDownListener easyCountDownListener
@@ -340,7 +341,8 @@ public class EasyCountDownTextureView extends TextureView
     }
 
 
-    @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         this.viewWidth = MeasureSpec.getSize(widthMeasureSpec);
@@ -382,7 +384,8 @@ public class EasyCountDownTextureView extends TextureView
     }
 
 
-    @Override protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+    @Override
+    protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
         super.onSizeChanged(width, height, oldWidth, oldHeight);
         this.viewWidth = width;
         this.viewHeight = height;
@@ -439,22 +442,28 @@ public class EasyCountDownTextureView extends TextureView
     }
 
 
+    public boolean isRunningState() {
+        return this.runningState;
+    }
+
+
     public float getRectWidth() {
-        return rectWidth;
+        return this.rectWidth;
     }
 
 
     public float getRectHeight() {
-        return rectHeight;
+        return this.rectHeight;
     }
 
 
     public float getRectSpacing() {
-        return rectSpacing;
+        return this.rectSpacing;
     }
 
 
-    @Override public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+    @Override
+    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         if (this.pauseTime > 0) {
             this.millisInFuture += (SystemClock.elapsedRealtime() - this.pauseTime);
             this.pauseTime = 0;
@@ -469,7 +478,8 @@ public class EasyCountDownTextureView extends TextureView
     }
 
 
-    @Override public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+    @Override
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
         if (this.autoResume) {
             this.pauseTime = SystemClock.elapsedRealtime();
         }
@@ -478,7 +488,8 @@ public class EasyCountDownTextureView extends TextureView
     }
 
 
-    @Override public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+    @Override
+    public void onSurfaceTextureUpdated(SurfaceTexture surface) {
         // Nothing to do
     }
 
@@ -579,7 +590,8 @@ public class EasyCountDownTextureView extends TextureView
         }
 
 
-        @Override public void run() {
+        @Override
+        public void run() {
             while (!this.completed) {
                 while (this.running) {
                     Canvas canvas = null;
