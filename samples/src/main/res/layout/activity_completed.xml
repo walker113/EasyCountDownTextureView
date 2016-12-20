@@ -34,6 +34,7 @@
         resAuto:easyCountBackgroundColor="#ffFFFFFF"
         resAuto:easyCountColonColor="#ffFF4A3E"
         resAuto:easyCountColonSize="15.4dp"
+        resAuto:easyCountRectBorderStroke="0.8dp"
         resAuto:easyCountRectBorderSize="0.5dp"
         resAuto:easyCountRectBorderColor="#ffE5E5E5"
         resAuto:easyCountRectHeight="20.2dp"
@@ -41,6 +42,8 @@
         resAuto:easyCountRectSpacing="6.7dp"
         resAuto:easyCountRectWidth="26.9dp"
         resAuto:easyCountTimeColor="#ffFF4A3E"
+        resAuto:easyCountColonStroke="0.15dp"
+        resAuto:easyCountTimeStroke="0.15dp"
         resAuto:easyCountTimeSize="15.4dp"/>
 
     <com.camnter.easycountdowntextureview.EasyCountDownTextureView
@@ -51,12 +54,15 @@
         resAuto:easyCountBackgroundColor="#ffFFF4DE"
         resAuto:easyCountColonColor="#ffFF4A3E"
         resAuto:easyCountColonSize="15.4dp"
+        resAuto:easyCountRectBorderStroke="0.8dp"
         resAuto:easyCountRectBorderSize="0.5dp"
         resAuto:easyCountRectBorderColor="#ffFCC980"
         resAuto:easyCountRectHeight="20.2dp"
         resAuto:easyCountRectRadius="0dp"
         resAuto:easyCountRectSpacing="6.7dp"
         resAuto:easyCountRectWidth="26.9dp"
+        resAuto:easyCountColonStroke="0.15dp"
+        resAuto:easyCountTimeStroke="0.15dp"
         resAuto:easyCountTimeColor="#ffFF4A3E"
         resAuto:easyCountTimeSize="15.4dp"/>
 
