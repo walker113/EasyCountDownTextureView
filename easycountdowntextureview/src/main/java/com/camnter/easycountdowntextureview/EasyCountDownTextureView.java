@@ -42,8 +42,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import static com.camnter.easycountdowntextureview.EasyCountDownTextureView.MainHandler.WHAT_COUNT_DOWN_COMPLETED;
-
 /**
  * Description：EasyCountDownTextureView
  * Created by：CaMnter
@@ -75,8 +73,8 @@ public class EasyCountDownTextureView extends TextureView
      * Default dp *
      **************/
     private static final float DEFAULT_BACKGROUND_PAINT_WIDTH = 0.01f;
-    private static final float DEFAULT_COLON_PAINT_WIDTH = 0.66f;
-    private static final float DEFAULT_TIME_PAINT_WIDTH = 0.77f;
+    private static final float DEFAULT_COLON_PAINT_STROKE = 0.66f;
+    private static final float DEFAULT_TIME_PAINT_STROKE = 0.77f;
     private static final float DEFAULT_ROUND_RECT_RADIUS = 2.66f;
     private static final float DEFAULT_RECT_WIDTH = 18.0f;
     private static final float DEFAULT_RECT_HEIGHT = 17.0f;
@@ -144,9 +142,9 @@ public class EasyCountDownTextureView extends TextureView
     private EasyCountDownListener easyCountDownListener;
 
 
-    static class MainHandler extends Handler {
+    private static class MainHandler extends Handler {
 
-        static final int WHAT_COUNT_DOWN_COMPLETED = 0x26;
+        private static final int WHAT_COUNT_DOWN_COMPLETED = 0x26;
 
         private final WeakReference<EasyCountDownListener> listenerReference;
 
@@ -258,7 +256,9 @@ public class EasyCountDownTextureView extends TextureView
         this.colonPaint.setTextSize(
             typedArray.getDimension(R.styleable.EasyCountDownTextureView_easyCountColonSize,
                 this.dp2px(DEFAULT_TIME_TEXT_SIZE)));
-        this.colonPaint.setStrokeWidth(this.dp2px(DEFAULT_COLON_PAINT_WIDTH));
+        this.colonPaint.setStrokeWidth(
+            typedArray.getDimension(R.styleable.EasyCountDownTextureView_easyCountColonStroke,
+                this.dp2px(DEFAULT_COLON_PAINT_STROKE)));
         this.colonPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         this.colonPaint.setTextAlign(Paint.Align.CENTER);
         this.colonPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -274,7 +274,9 @@ public class EasyCountDownTextureView extends TextureView
         this.timePaint.setTextSize(
             typedArray.getDimension(R.styleable.EasyCountDownTextureView_easyCountTimeSize,
                 this.dp2px(DEFAULT_COLON_TEXT_SIZE)));
-        this.timePaint.setStrokeWidth(this.dp2px(DEFAULT_TIME_PAINT_WIDTH));
+        this.timePaint.setStrokeWidth(
+            typedArray.getDimension(R.styleable.EasyCountDownTextureView_easyCountTimeStroke,
+                this.dp2px(DEFAULT_TIME_PAINT_STROKE)));
         this.timePaint.setStyle(Paint.Style.FILL_AND_STROKE);
         this.timePaint.setTextAlign(Paint.Align.CENTER);
         this.timePaint.setStrokeCap(Paint.Cap.ROUND);
@@ -282,19 +284,19 @@ public class EasyCountDownTextureView extends TextureView
 
 
     private void initRectBorderPaint(@NonNull final TypedArray typedArray) {
-        final float rectBorderSize = typedArray.getDimension(
-            R.styleable.EasyCountDownTextureView_easyCountRectBorderSize, Float.MIN_VALUE);
-        this.checkRectBorder(rectBorderSize);
+        final float rectBorderStroke = typedArray.getDimension(
+            R.styleable.EasyCountDownTextureView_easyCountRectBorderStroke, Float.MIN_VALUE);
+        this.checkRectBorder(rectBorderStroke);
         if (!this.drawRectBorder) return;
         this.rectBorderPaint = new Paint();
         this.rectBorderPaint.setAntiAlias(true);
         this.rectBorderPaint.setColor(
             typedArray.getColor(R.styleable.EasyCountDownTextureView_easyCountRectBorderColor,
                 DEFAULT_COLOR_RECT_BORDER));
-        this.rectBorderPaint.setTextSize(rectBorderSize);
+        this.rectBorderPaint.setStrokeWidth(rectBorderStroke);
         this.rectBorderPaint.setStyle(Paint.Style.STROKE);
         this.rectBorderPaint.setTextAlign(Paint.Align.CENTER);
-        this.rectBorderPaint.setStrokeCap(Paint.Cap.ROUND);
+        this.rectBorderPaint.setStrokeCap(Paint.Cap.SQUARE);
     }
 
 
@@ -600,7 +602,8 @@ public class EasyCountDownTextureView extends TextureView
                                 this.completed = true;
                                 this.running = false;
                                 if (mainHandler != null) {
-                                    mainHandler.sendEmptyMessageDelayed(WHAT_COUNT_DOWN_COMPLETED,
+                                    mainHandler.sendEmptyMessageDelayed(
+                                        MainHandler.WHAT_COUNT_DOWN_COMPLETED,
                                         1000);
                                 }
                             }
@@ -680,8 +683,10 @@ public class EasyCountDownTextureView extends TextureView
                                 @Nullable Paint paint) {
         if (paint == null) return;
         if (rectRadius > 0) {
+            paint.setStrokeCap(Paint.Cap.ROUND);
             canvas.drawRoundRect(rect, rectRadius, rectRadius, paint);
         } else {
+            paint.setStrokeCap(Paint.Cap.SQUARE);
             canvas.drawRect(rect, paint);
         }
     }
