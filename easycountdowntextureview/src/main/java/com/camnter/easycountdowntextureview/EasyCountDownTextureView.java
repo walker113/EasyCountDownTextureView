@@ -61,7 +61,7 @@ public class EasyCountDownTextureView extends TextureView
     private static final int DEFAULT_COLOR_COLON = Color.BLACK;
     private static final int DEFAULT_COLOR_TIME = Color.WHITE;
     private static final int DEFAULT_COLOR_RECT_BORDER = Color.BLACK;
-    private DisplayMetrics mMetrics;
+    private DisplayMetrics metrics;
 
     private static final int COUNT_DOWN_INTERVAL = 1000;
 
@@ -69,7 +69,7 @@ public class EasyCountDownTextureView extends TextureView
     private static final long ONE_MINUTE = 1000 * 60L;
     private static final long ONE_SECOND = 1000L;
 
-    private volatile long mMillisInFuture = 0L;
+    private volatile long millisInFuture = 0L;
 
     /**************
      * Default dp *
@@ -118,7 +118,7 @@ public class EasyCountDownTextureView extends TextureView
     private float defaultWrapContentWidth;
     private float defaultWrapContentHeight;
 
-    private EasyThread mThread;
+    private EasyThread easyThread;
 
     private final Locale locale = Locale.getDefault();
     private final Calendar mCalendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+00:00"));
@@ -127,7 +127,9 @@ public class EasyCountDownTextureView extends TextureView
     private Paint rectBorderPaint;
 
     private Paint timePaint;
+    // for draw time
     private float timePaintBaseLine;
+    // for draw colon
     private float timePaintBaseLineFixed;
 
     private Paint backgroundPaint;
@@ -139,7 +141,7 @@ public class EasyCountDownTextureView extends TextureView
     private boolean autoResume = true;
     private long pauseTime = 0L;
 
-    private EasyCountDownListener mEasyCountDownListener;
+    private EasyCountDownListener easyCountDownListener;
 
 
     static class MainHandler extends Handler {
@@ -149,7 +151,7 @@ public class EasyCountDownTextureView extends TextureView
         private final WeakReference<EasyCountDownListener> listenerReference;
 
 
-        MainHandler(@NonNull EasyCountDownListener easyCountDownListener) {
+        MainHandler(@NonNull final EasyCountDownListener easyCountDownListener) {
             super(Looper.getMainLooper());
             this.listenerReference = new WeakReference<>(easyCountDownListener);
         }
@@ -201,7 +203,7 @@ public class EasyCountDownTextureView extends TextureView
 
 
     private void init(Context context, AttributeSet attrs) {
-        this.mMetrics = this.getResources().getDisplayMetrics();
+        this.metrics = this.getResources().getDisplayMetrics();
         this.defaultWrapContentWidth = this.dp2px(DEFAULT_VIEW_WIDTH);
         this.defaultWrapContentHeight = this.dp2px(DEFAULT_VIEW_HEIGHT);
 
@@ -315,9 +317,9 @@ public class EasyCountDownTextureView extends TextureView
 
 
     private void updateTime() {
-        this.mMillisInFuture = this.timeHour * ONE_HOUR + this.timeMinute * ONE_MINUTE +
+        this.millisInFuture = this.timeHour * ONE_HOUR + this.timeMinute * ONE_MINUTE +
             this.timeSecond * ONE_SECOND;
-        this.setTime(this.mMillisInFuture);
+        this.setTime(this.millisInFuture);
     }
 
 
@@ -387,49 +389,50 @@ public class EasyCountDownTextureView extends TextureView
     }
 
 
-    public void setTimeHour(int timeHour) {
+    public void setTimeHour(final int timeHour) {
         this.timeHour = timeHour;
         this.updateTime();
     }
 
 
-    public void setTimeMinute(int timeMinute) {
+    public void setTimeMinute(final int timeMinute) {
         this.timeMinute = timeMinute;
         this.updateTime();
     }
 
 
-    public void setTimeSecond(int timeSecond) {
+    public void setTimeSecond(final int timeSecond) {
         this.timeSecond = timeSecond;
         this.updateTime();
     }
 
 
-    public void setRectWidth(float rectWidthDp) {
+    public void setRectWidth(final float rectWidthDp) {
         this.rectWidth = this.dp2px(rectWidthDp);
         this.refitBackgroundAttribute();
     }
 
 
-    public void setRectHeight(float rectHeightDp) {
+    public void setRectHeight(final float rectHeightDp) {
         this.rectHeight = this.dp2px(rectHeightDp);
         this.refitBackgroundAttribute();
     }
 
 
-    public void setRectSpacing(float rectSpacingDp) {
+    public void setRectSpacing(final float rectSpacingDp) {
         this.rectSpacing = this.dp2px(rectSpacingDp);
         this.refitBackgroundAttribute();
     }
 
 
-    public void setAutoResume(boolean autoResume) {
+    public void setAutoResume(final boolean autoResume) {
         this.autoResume = autoResume;
     }
 
 
-    public void setEasyCountDownListener(EasyCountDownListener easyCountDownListener) {
-        this.mEasyCountDownListener = easyCountDownListener;
+    public void setEasyCountDownListener(
+        @NonNull final EasyCountDownListener easyCountDownListener) {
+        this.easyCountDownListener = easyCountDownListener;
         this.mainHandler = new MainHandler(easyCountDownListener);
     }
 
@@ -451,7 +454,7 @@ public class EasyCountDownTextureView extends TextureView
 
     @Override public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         if (this.pauseTime > 0) {
-            this.mMillisInFuture += (SystemClock.elapsedRealtime() - this.pauseTime);
+            this.millisInFuture += (SystemClock.elapsedRealtime() - this.pauseTime);
             this.pauseTime = 0;
         }
         this.start();
@@ -474,19 +477,19 @@ public class EasyCountDownTextureView extends TextureView
 
 
     @Override public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-
+        // Nothing to do
     }
 
 
     public void start() {
         if (this.runningState) return;
-        if (mMillisInFuture > 0) {
-            this.mThread = new EasyThread();
-            this.mThread.startThread();
-            this.mThread.start();
+        if (millisInFuture > 0) {
+            this.easyThread = new EasyThread();
+            this.easyThread.startThread();
+            this.easyThread.start();
             this.runningState = true;
-            if (this.mEasyCountDownListener != null) {
-                this.mEasyCountDownListener.onCountDownStart();
+            if (this.easyCountDownListener != null) {
+                this.easyCountDownListener.onCountDownStart();
             }
         } else {
             this.drawZeroZeroZero();
@@ -497,12 +500,12 @@ public class EasyCountDownTextureView extends TextureView
 
     public void stop() {
         if (!this.runningState) return;
-        if (this.mThread != null) {
-            this.mThread.interrupt();
-            this.mThread = null;
+        if (this.easyThread != null) {
+            this.easyThread.interrupt();
+            this.easyThread = null;
         }
-        if (this.mEasyCountDownListener != null) {
-            this.mEasyCountDownListener.onCountDownStop(this.mMillisInFuture);
+        if (this.easyCountDownListener != null) {
+            this.easyCountDownListener.onCountDownStop(this.millisInFuture);
         }
         this.runningState = false;
     }
@@ -513,8 +516,8 @@ public class EasyCountDownTextureView extends TextureView
      *
      * @param date date
      */
-    public void setTime(Date date) {
-        this.mMillisInFuture = date.getTime();
+    public void setTime(@NonNull final Date date) {
+        this.millisInFuture = date.getTime();
     }
 
 
@@ -524,8 +527,8 @@ public class EasyCountDownTextureView extends TextureView
      * @param timeMillis timeMillis
      */
     public void setTime(final long timeMillis) {
-        this.mMillisInFuture = timeMillis;
-        this.mCalendar.setTimeInMillis(this.mMillisInFuture);
+        this.millisInFuture = timeMillis;
+        this.mCalendar.setTimeInMillis(this.millisInFuture);
     }
 
 
@@ -590,10 +593,10 @@ public class EasyCountDownTextureView extends TextureView
                                 String.format(locale, LESS_THAN_TEN_FORMAT, timeMinute),
                                 String.format(locale, LESS_THAN_TEN_FORMAT, timeSecond));
                             // refresh time
-                            mMillisInFuture -= 1000;
-                            mCalendar.setTimeInMillis(mMillisInFuture);
+                            millisInFuture -= 1000;
+                            mCalendar.setTimeInMillis(millisInFuture);
 
-                            if (mMillisInFuture < 0) {
+                            if (millisInFuture < 0) {
                                 this.completed = true;
                                 this.running = false;
                                 if (mainHandler != null) {
@@ -691,7 +694,7 @@ public class EasyCountDownTextureView extends TextureView
      * @return px
      */
     private float dp2px(final float dp) {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, this.mMetrics);
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, this.metrics);
     }
 
 
