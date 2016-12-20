@@ -464,11 +464,8 @@ public class EasyCountDownTextureView extends TextureView
 
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-        if (this.pauseTime > 0) {
-            this.millisInFuture -= (SystemClock.elapsedRealtime() - this.pauseTime);
-            this.pauseTime = 0;
-        }
-        this.start();
+        Log.i(TAG, "[onSurfaceTextureAvailable]");
+        this.startAndRestoreTime();
     }
 
 
@@ -480,11 +477,25 @@ public class EasyCountDownTextureView extends TextureView
 
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        Log.i(TAG, "[onSurfaceTextureDestroyed]");
+        this.stopAndRecordTime();
+        return true;
+    }
+
+
+    public void stopAndRecordTime() {
         if (this.autoResume) {
             this.pauseTime = SystemClock.elapsedRealtime();
         }
         this.stop();
-        return true;
+    }
+
+
+    public void startAndRestoreTime() {
+        if (this.pauseTime > 0) {
+            this.millisInFuture -= (SystemClock.elapsedRealtime() - this.pauseTime);
+            this.pauseTime = 0;
+        }
     }
 
 
@@ -618,6 +629,8 @@ public class EasyCountDownTextureView extends TextureView
                             if (millisInFuture < 0) {
                                 this.completed = true;
                                 this.running = false;
+                                // refresh runningState
+                                runningState = false;
                                 if (mainHandler != null) {
                                     mainHandler.sendEmptyMessageDelayed(
                                         MainHandler.WHAT_COUNT_DOWN_COMPLETED,
