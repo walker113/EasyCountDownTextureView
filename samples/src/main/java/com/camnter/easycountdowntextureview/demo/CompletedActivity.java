@@ -45,6 +45,14 @@ public class CompletedActivity extends AppCompatActivity
 
 
     /**
+     * When count down time error
+     */
+    @Override public void onCountDownTimeError() {
+
+    }
+
+
+    /**
      * When count down stop
      *
      * @param millisInFuture millisInFuture

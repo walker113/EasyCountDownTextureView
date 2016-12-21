@@ -519,6 +519,9 @@ public class EasyCountDownTextureView extends TextureView
                 this.easyCountDownListener.onCountDownStart();
             }
         } else {
+            if (this.easyCountDownListener != null) {
+                this.easyCountDownListener.onCountDownTimeError();
+            }
             this.runningState = false;
         }
     }
@@ -746,6 +749,11 @@ public class EasyCountDownTextureView extends TextureView
          * When count down start
          */
         void onCountDownStart();
+
+        /**
+         * When count down time error
+         */
+        void onCountDownTimeError();
 
         /**
          * When count down stop
