@@ -620,6 +620,7 @@ public class EasyCountDownTextureView extends TextureView
                     Canvas canvas = null;
                     try {
                         synchronized (this) {
+                            lastRecordTime = SystemClock.elapsedRealtime();
                             canvas = EasyCountDownTextureView.this.lockCanvas();
                             if (canvas == null) continue;
                             timeHour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -631,12 +632,10 @@ public class EasyCountDownTextureView extends TextureView
                                 String.format(locale, LESS_THAN_TEN_FORMAT, timeMinute),
                                 String.format(locale, LESS_THAN_TEN_FORMAT, timeSecond));
 
-                            final long pastTime = SystemClock.uptimeMillis() - lastRecordTime;
+                            final long pastTime = SystemClock.elapsedRealtime() - lastRecordTime;
                             if (pastTime < COUNT_DOWN_INTERVAL) {
                                 this.wait(COUNT_DOWN_INTERVAL - pastTime);
                             }
-
-                            lastRecordTime = SystemClock.uptimeMillis();
                             // refresh time
                             millisInFuture -= 1000;
                             if (millisInFuture < 0) {
@@ -655,7 +654,12 @@ public class EasyCountDownTextureView extends TextureView
                             }
                         }
                     } catch (InterruptedException interruptedException) {
-                        Log.i(TAG, "[run]\t\t\t thread interrupted", interruptedException);
+                        final long intervalTime = SystemClock.elapsedRealtime() - lastRecordTime;
+                        Log.i(TAG,
+                            "[run]\t\t\t thread interrupted\t\t\t interval time: " + intervalTime,
+                            interruptedException);
+                        millisInFuture -= intervalTime;
+                        calendar.setTimeInMillis(millisInFuture);
                         this.stopThread();
                     } catch (Exception e) {
                         e.printStackTrace();
