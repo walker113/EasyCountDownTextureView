@@ -589,18 +589,14 @@ public class EasyCountDownTextureView extends TextureView
 
 
         final void startThread() {
-            synchronized (this) {
-                this.completed = false;
-                this.running = true;
-            }
+            this.completed = false;
+            this.running = true;
         }
 
 
         final void stopThread() {
-            synchronized (this) {
-                this.completed = true;
-                this.running = false;
-            }
+            this.completed = true;
+            this.running = false;
         }
 
 
