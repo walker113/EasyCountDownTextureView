@@ -9,6 +9,8 @@ EasyCountDownTextureView
 [ ![Download](https://api.bintray.com/packages/camnter/maven/EasyCountDownTextureView/images/download.svg) ](https://bintray.com/camnter/maven/EasyCountDownTextureView/_latestVersion)   
 
 **Easy count down by TextureView**
+   
+<br>
 <br>
    
 ## Attention
