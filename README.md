@@ -2,6 +2,7 @@ EasyCountDownTextureView
 ==
    
 <br/>
+<br/>
    
 ![Language](https://img.shields.io/badge/language-Java-EE0000.svg) [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/CaMnter/EasyCountDownTextureView/blob/master/LICENSE) 
 ![Version](https://img.shields.io/badge/version-1.3-8470FF.svg) 
@@ -9,9 +10,11 @@ EasyCountDownTextureView
 [ ![Download](https://api.bintray.com/packages/camnter/maven/EasyCountDownTextureView/images/download.svg) ](https://bintray.com/camnter/maven/EasyCountDownTextureView/_latestVersion)   
    
 <br/>
+<br/>
    
 **Easy count down by TextureView**
    
+<br/>
 <br/>
    
 ## Attention
@@ -19,36 +22,61 @@ EasyCountDownTextureView
 **minSdkVersion >= 14**
    
 <br/>
+<br/>
    
 ## Gradle
 
 ```groovy
 dependencies {
-	compile 'com.camnter.easycountdowntextureview:easycountdowntextureview:1.4'
+	compile 'com.camnter.easycountdowntextureview:easycountdowntextureview:1.5'
 }
 ```
    
+<br/>
 <br/>
    
 ## Attributes
 
 ```xml
 <declare-styleable name="EasyCountDownTextureView">
-    <attr name="easyCountRectWidth" format="dimension" />
-    <attr name="easyCountRectHeight" format="dimension" />
-    <attr name="easyCountRectRadius" format="dimension" />
-    <attr name="easyCountRectSpacing" format="dimension" />
-    <attr name="easyCountTimeColor" format="color" />
-    <attr name="easyCountColonColor" format="color" />
-    <attr name="easyCountBackgroundColor" format="color" />
-    <attr name="easyCountColonSize" format="dimension" />
-    <attr name="easyCountTimeSize" format="dimension" />
-    <attr name="easyCountHour" format="integer" />
-    <attr name="easyCountMinute" format="integer" />
-    <attr name="easyCountSecond" format="integer" />
+    <attr name="easyCountRectWidth"
+        format="dimension"/>
+    <attr name="easyCountRectHeight"
+        format="dimension"/>
+    <attr name="easyCountRectRadius"
+        format="dimension"/>
+    <attr name="easyCountRectBorderSize"
+        format="dimension"/>
+    <attr name="easyCountRectBorderColor"
+        format="color"/>
+    <attr name="easyCountRectBorderStroke"
+        format="dimension"/>
+    <attr name="easyCountRectSpacing"
+        format="dimension"/>
+    <attr name="easyCountTimeColor"
+        format="color"/>
+    <attr name="easyCountTimeSize"
+        format="dimension"/>
+    <attr name="easyCountTimeStroke"
+        format="dimension"/>
+    <attr name="easyCountColonColor"
+        format="color"/>
+    <attr name="easyCountColonSize"
+        format="dimension"/>
+    <attr name="easyCountColonStroke"
+        format="dimension"/>
+    <attr name="easyCountBackgroundColor"
+        format="color"/>
+    <attr name="easyCountHour"
+        format="integer"/>
+    <attr name="easyCountMinute"
+        format="integer"/>
+    <attr name="easyCountSecond"
+        format="integer"/>
 </declare-styleable>
 ```
    
+<br/>
 <br/>
    
 ## Easy use
@@ -77,7 +105,8 @@ dependencies {
 </RelativeLayout>
 ```
    
-   
+<br/>   
+      
 ![TextureView_1](https://github.com/CaMnter/EasyCountDownTextureView/raw/master/screenshot/textureview_1.gif) 
   
 ```xml
@@ -102,6 +131,7 @@ dependencies {
 ![TextureView_2](https://github.com/CaMnter/EasyCountDownTextureView/raw/master/screenshot/textureview_2.gif) 
    
 <br/>
+<br/>
    
 ## Performance
 
@@ -110,6 +140,7 @@ Without scrolling, only time in the refreshing
 <img src="http://ww1.sinaimg.cn/large/006lPEc9gw1f30vnkpd1ej31ay298k20.jpg" width="420x"/> 
 <img src="http://ww4.sinaimg.cn/large/006lPEc9gw1f30vo7yaqaj31ay298wzw.jpg" width="420x"/>
    
+<br/>
 <br/>
    
 ## License
