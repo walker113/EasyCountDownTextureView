@@ -4,7 +4,7 @@ EasyCountDownTextureView
 <br>
    
 ![Language](https://img.shields.io/badge/language-Java-EE0000.svg) [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/CaMnter/EasyCountDownTextureView/blob/master/LICENSE) 
-![Version](https://img.shields.io/badge/version-1.3-8470FF.svg) 
+![Version](https://img.shields.io/badge/version-1.6-8470FF.svg) 
 ![SDK](https://img.shields.io/badge/SDK-14%2B-orange.svg) 
 [ ![Download](https://api.bintray.com/packages/camnter/maven/EasyCountDownTextureView/images/download.svg) ](https://bintray.com/camnter/maven/EasyCountDownTextureView/_latestVersion)   
 
