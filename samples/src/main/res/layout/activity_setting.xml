@@ -33,7 +33,7 @@
         resAuto:easyCountBackgroundColor="#ffdddddd"
         resAuto:easyCountColonColor="#ffdddddd"
         resAuto:easyCountColonSize="20sp"
-        resAuto:easyCountHour="6"
+        resAuto:easyCountHour="26"
         resAuto:easyCountMinute="6"
         resAuto:easyCountRectHeight="34dp"
         resAuto:easyCountRectRadius="5dp"
