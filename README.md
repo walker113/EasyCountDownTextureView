@@ -1,4 +1,5 @@
 EasyCountDownTextureView
+(可以参考项目时间字体显示)
 ==
    
 <br>
@@ -10,7 +11,7 @@ EasyCountDownTextureView
 
 **Easy count down by TextureView**
 
-可以参考项目时间字体显示
+
    
 <br>
 <br>
