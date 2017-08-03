@@ -9,7 +9,8 @@ EasyCountDownTextureView
 [ ![Download](https://api.bintray.com/packages/camnter/maven/EasyCountDownTextureView/images/download.svg) ](https://bintray.com/camnter/maven/EasyCountDownTextureView/_latestVersion)   
 
 **Easy count down by TextureView**
-** 可以参考项目时间字体显示 **
+
+* 可以参考项目时间字体显示 *
    
 <br>
 <br>
